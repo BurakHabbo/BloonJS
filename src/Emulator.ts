@@ -10,6 +10,7 @@ import Database from './Database/Database';
 import CleanerThread from './Core/CleanerThread';
 import ThreadPooling from './Threading/ThreadPooling';
 import GameServer from './Networking/GameServer/GameServer';
+import GameEnvironment from './HabboHotel/GameEnvironment';
 
 export default class Emulator {
 	public static logo: string = "\r _______   __                                   _____   ______   __ \n/       \\ /  |                                 /     | /      \\ /  |\n$$$$$$$  |$$ |  ______    ______   _______     $$$$$ |/$$$$$$  |$$ |\n$$ |__$$ |$$ | /      \\  /      \\ /       \\       $$ |$$ \\__$$/ $$ |\n$$    $$< $$ |/$$$$$$  |/$$$$$$  |$$$$$$$  | __   $$ |$$      \\ $$ |\n$$$$$$$  |$$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |/  |  $$ | $$$$$$  |$$/ \n$$ |__$$ |$$ |$$ \\__$$ |$$ \\__$$ |$$ |  $$ |$$ \\__$$ |/  \\__$$ | __ \n$$    $$/ $$ |$$    $$/ $$    $$/ $$ |  $$ |$$    $$/ $$    $$/ /  |\n$$$$$$$/  $$/  $$$$$$/   $$$$$$/  $$/   $$/  $$$$$$/   $$$$$$/  $$/ \n";
@@ -25,6 +26,7 @@ export default class Emulator {
 	private static logging: Logging;
 	private static random: Random;
 	private static gameServer: GameServer;
+	private static gameEnvironment: GameEnvironment;
 
 	public static main(): void {
 		Emulator.stopped = false;
@@ -39,6 +41,8 @@ export default class Emulator {
 		Emulator.texts = new TextsManager();
 		new CleanerThread();
 		Emulator.gameServer = new GameServer(Emulator.getConfig().getValue('game.host', '127.0.0.1'), Emulator.getConfig().getInt('game.port', 30000));
+		Emulator.gameEnvironment = new GameEnvironment();
+		Emulator.gameEnvironment.load();
 		Emulator.gameServer.initialise();
 		Emulator.gameServer.connect();
 	}
