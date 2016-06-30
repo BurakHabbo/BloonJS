@@ -10,7 +10,7 @@ export default class Database {
 		this.config = config;
 
 		this.pool = mysql.createPool({
-			connectionLimit: 10,
+			connectionLimit: this.config.getInt('db.poolsize', 10),
 			host: this.config.getValue('db.hostname'),
 			user: this.config.getValue('db.username'),
 			password: this.config.getValue('db.password'),
@@ -22,9 +22,10 @@ export default class Database {
 				Emulator.getLogging().logErrorLine('[DATABASE] Failed to connect to the database. Shutting down...');
 			}else{
 				connection.release();
-				Emulator.getLogging().logStart('Database -> Connected!');
 			}
 		});
+
+		Emulator.getLogging().logStart('Database -> Connected!');
 	}
 
 	public getPool(): mysql.IPool {

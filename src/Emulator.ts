@@ -29,6 +29,8 @@ export default class Emulator {
 	private static gameEnvironment: GameEnvironment;
 
 	public static main(): void {
+		let startTime : number = Emulator.getCurrentTimeMillis();
+
 		Emulator.stopped = false;
 		Emulator.logging = new Logging();
 		Emulator.logging.logStart(Emulator.logo);
@@ -45,6 +47,10 @@ export default class Emulator {
 		Emulator.gameEnvironment.load();
 		Emulator.gameServer.initialise();
 		Emulator.gameServer.connect();
+
+		Emulator.getLogging().logStart('Habbo Hotel Emulator has succesfully loaded.');
+		Emulator.getLogging().logStart("You're running: " + Emulator.version);
+		Emulator.getLogging().logStart("System launched in: " + (Emulator.getCurrentTimeMillis() - startTime)+ "ms!");
 	}
 
 	public static getLogging(): Logging {
@@ -67,6 +73,10 @@ export default class Emulator {
 		return this.threading;
 	}
 
+	public static getGameEnvironment(): GameEnvironment {
+		return this.gameEnvironment;
+	}
+
 	public static dateToTimeStamp(date: Date): number {
 		return date.getTime();
 	}
@@ -81,6 +91,10 @@ export default class Emulator {
 
 	public static getIntUnixTimestamp(): number {
 		return Date.now() / 1000 | 0;
+	}
+
+	public static getCurrentTimeMillis(): number {
+		return Date.now();
 	}
 }
 
