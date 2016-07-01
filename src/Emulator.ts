@@ -1,6 +1,7 @@
 /// <reference path="refs/node.d.ts" />
 /// <reference path="refs/ini.d.ts" />
 /// <reference path="refs/mysql.d.ts" />
+/// <reference path="refs/jsbn.d.ts" />
 //process.env.UV_THREADPOOL_SIZE=64;
 import Logging from './Core/Logging';
 import Random from './Util/Random';
@@ -75,6 +76,10 @@ export default class Emulator {
 
 	public static getGameEnvironment(): GameEnvironment {
 		return this.gameEnvironment;
+	}
+
+	public static getGameServer(): GameServer {
+		return this.gameServer;
 	}
 
 	public static dateToTimeStamp(date: Date): number {

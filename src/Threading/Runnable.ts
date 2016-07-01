@@ -1,5 +1,5 @@
-export default class Runnable {
-	public run(): void {
-		
-	}
+abstract class Runnable {
+	public abstract run(): void;
 }
+
+export default Runnable;

@@ -1,3 +1,5 @@
+import Emulator from '../Emulator';
+
 export default class Logging {
 	public static ANSI_BRIGHT: string = "\u001B[1m";
 	public static ANSI_ITALICS: string = "\u001B[3m";
@@ -20,5 +22,11 @@ export default class Logging {
 
     public logErrorLine(line: Object): void {
         console.log(line.toString().replace("[", "[" + Logging.ANSI_033 + "[1m" + Logging.ANSI_033 + "[31m").replace("]", Logging.ANSI_033 + "[0m]"));
+    }
+
+    public logPacketLine(line: Object): void {
+        //if (Emulator.getConfig().getBoolean('debug.show.packets')) {
+            console.log("[" + Logging.ANSI_BLUE + "PACKET" + Logging.ANSI_RESET + "]" + line.toString());
+        //}
     }
 }
