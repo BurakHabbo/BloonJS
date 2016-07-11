@@ -13,6 +13,7 @@ export default class GameClient extends net.Socket {
 	private rc4initialized: boolean = false;
 	private rc4server: RC4;
 	private rc4client: RC4;
+	private machineId: string;
 
 	public constructor() {
 		super();
@@ -50,6 +51,14 @@ export default class GameClient extends net.Socket {
 
 	public getRC4server(): RC4 {
 		return this.rc4server;
+	}
+
+	public getMachineId(): string {
+		return this.machineId;
+	}
+
+	public setMachineId(machineId: string): void {
+		this.machineId = machineId;
 	}
 
 	public isRC4initialized(): boolean {
