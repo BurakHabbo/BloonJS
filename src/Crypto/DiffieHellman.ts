@@ -32,7 +32,28 @@ export default class DiffieHellman {
 		this.publicKey = this.generator.modPow(this.privateKey, this.prime);
 	}
 
+	public generateSharedKey(clientKey: string, base?: number): void {
+		this.publicClientKey = new jsbn.BigInteger(clientKey, base ? base : 10);
+		this.sharedKey = this.publicClientKey.modPow(this.privateKey, this.prime);
+	}
+
 	public randomString(){
 		return (Math.floor(Math.random()*1000000000000).toString(16) + Math.floor(Math.random()*1000000000000).toString(16) + Math.floor(Math.random()*1000000000000).toString(16));
+	}
+
+	public getPrime(): jsbn.BigInteger {
+		return this.prime;
+	}
+
+	public getGenerator(): jsbn.BigInteger {
+		return this.generator;
+	}
+
+	public getPublicKey(): jsbn.BigInteger {
+		return this.publicKey;
+	}
+
+	public getSharedKey(): jsbn.BigInteger {
+		return this.sharedKey;
 	}
 }

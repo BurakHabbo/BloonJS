@@ -33,7 +33,7 @@ export default class CleanerThread extends Runnable {
 	}
 
 	public run(): void {
-		console.log('Scheduled');
+		//console.log('Scheduled');
 	}
 
 	public databaseCleanup(): void {

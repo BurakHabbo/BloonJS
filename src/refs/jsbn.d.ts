@@ -134,7 +134,7 @@ declare module "jsbn" {
         fromNumber(a: number, b?: number, c?: number): void;
 
         // (public) convert to bigendian byte array
-        toByteArray(): number[];
+        toByteArray(unsigned?: boolean): number[];
 
         equals(a: BigInteger): boolean;
 

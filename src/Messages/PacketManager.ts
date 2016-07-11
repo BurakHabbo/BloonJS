@@ -2,6 +2,7 @@ import MessageHandler from './Incoming/MessageHandler';
 import Incoming from './Incoming/Incoming';
 import ReleaseVersionMessageEvent from './Incoming/Handshake/ReleaseVersionMessageEvent';
 import InitCryptoMessageEvent from './Incoming/Handshake/InitCryptoMessageEvent';
+import GenerateSecretKeyMessageEvent from './Incoming/Handshake/GenerateSecretKeyMessageEvent';
 import GameClient from '../HabboHotel/GameClients/GameClient';
 import ClientMessage from './ClientMessage';
 import Emulator from '../Emulator';
@@ -49,5 +50,6 @@ export default class PacketManager {
 	public registerHandshake(): void {
 		this.registerHandler(Incoming.ReleaseVersionMessageEvent, ReleaseVersionMessageEvent);
 		this.registerHandler(Incoming.InitCryptoMessageEvent, InitCryptoMessageEvent);
+		this.registerHandler(Incoming.GenerateSecretKeyMessageEvent, GenerateSecretKeyMessageEvent);
 	}
 }

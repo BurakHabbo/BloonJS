@@ -36,6 +36,11 @@ export default class GameServer {
 
 		c.initDH = new GameClient().initDH;
 		c.getDiffieHellman = new GameClient().getDiffieHellman;
+		c.sendResponse = new GameClient().sendResponse;
+		c.getRC4client = new GameClient().getRC4client;
+		c.getRC4server = new GameClient().getRC4server;
+		c.isRC4initialized = new GameClient().isRC4initialized;
+		c.initRC4 = new GameClient().initRC4;
 
 		c.on('data', function(buffer: Buffer){
 
@@ -49,12 +54,18 @@ export default class GameServer {
 				return;
 			}
 
+			if(c.isRC4initialized()){
+				buffer = c.getRC4client().parse(buffer);
+			}
+
 			let countPackets: number = 0;
-			let maxPackets: number = 30;
+			let maxPackets: number = 15;
 
 			while(buffer.length > 3){
-				if(countPackets++ >= maxPackets)
+				if(countPackets++ >= maxPackets){
+					c.destroy();
 					return;
+				}
 
 				let length: number = buffer.readUInt32BE(0) + 4;
 				
