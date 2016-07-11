@@ -14,6 +14,7 @@ export default class GameClient extends net.Socket {
 	private rc4server: RC4;
 	private rc4client: RC4;
 	private machineId: string;
+	private machinePlatform: string;
 
 	public constructor() {
 		super();
@@ -57,8 +58,24 @@ export default class GameClient extends net.Socket {
 		return this.machineId;
 	}
 
+	public getMachinePlatform(): string {
+		return this.machinePlatform;
+	}
+
+	public getHabbo(): Habbo {
+		return this.habbo;
+	}
+
+	public setHabbo(habbo: Habbo): void {
+		this.habbo = habbo;
+	}
+
 	public setMachineId(machineId: string): void {
 		this.machineId = machineId;
+	}
+
+	public setMachinePlatform(machinePlatform: string): void {
+		this.machinePlatform = machinePlatform;
 	}
 
 	public isRC4initialized(): boolean {

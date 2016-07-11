@@ -34,7 +34,7 @@ export default class ServerMessage {
 		this.buffer = Buffer.concat([this.buffer, buffer]);
 	}
 
-	public appendInt32(value: number | string | boolean): void {
+	public appendInt(value: number | string | boolean): void {
 		let buffer: Buffer = new Buffer(4);
 
 		if(typeof value == 'number'){
@@ -48,7 +48,7 @@ export default class ServerMessage {
 		this.buffer = Buffer.concat([this.buffer, buffer]);
 	}
 
-	public appendInt16(value: number): void {
+	public appendShort(value: number): void {
 		let buffer: Buffer = new Buffer(2);
 		buffer.writeUInt16BE(value, 0);
 

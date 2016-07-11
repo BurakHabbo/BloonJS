@@ -1,5 +1,6 @@
 import Emulator from '../../Emulator';
 import Habbo from './Habbo';
+import GameClient from '../GameClients/GameClient';
 
 export default class HabboManager {
 	private onlineHabbos: Array<Habbo>;
@@ -28,6 +29,30 @@ export default class HabboManager {
 				}*/
 			});
 		}
+	}
+
+	public loadHabbo(sso: string, client: GameClient, cb: (client: GameClient, habbo: Habbo) => void): void {
+		Emulator.getDatabase().getPool().getConnection(function(err, connection){
+			connection.query('SELECT * FROM users WHERE auth_ticket = ? LIMIT 1', [sso], function(err, rows){
+				if(rows.length == 1){
+					let row = rows[0];
+					let h: Habbo = Emulator.getGameEnvironment().getHabboManager().getHabbo(<number>row.id);
+
+					if(h != null){
+						//h.getClient().sendResponse(new GenericAlertComposer("You logged in from somewhere else."));
+						//h.getClient().destroy();
+						h = null;
+					}
+
+					let habbo = new Habbo(row);
+					cb(client, habbo);
+				}else{
+					client.destroy();
+				}
+				
+				connection.release();
+			});
+		});
 	}
 
 	public getOnlineCount(): number {

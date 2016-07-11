@@ -34,13 +34,19 @@ export default class GameServer {
 	public handleConnection(c: GameClient): void {
 		Emulator.getGameServer().getGameClientManager().addClient(c);
 
-		c.initDH = new GameClient().initDH;
-		c.getDiffieHellman = new GameClient().getDiffieHellman;
-		c.sendResponse = new GameClient().sendResponse;
-		c.getRC4client = new GameClient().getRC4client;
-		c.getRC4server = new GameClient().getRC4server;
-		c.isRC4initialized = new GameClient().isRC4initialized;
-		c.initRC4 = new GameClient().initRC4;
+		/* Temp fix (maybe definitive ?), GameClient extends net.Socket but this callback return instance of net.Socket and is why we need reference all methods/attributes */
+		let x: GameClient = new GameClient();
+		c.initDH = x.initDH;
+		c.getDiffieHellman = x.getDiffieHellman;
+		c.sendResponse = x.sendResponse;
+		c.getRC4client = x.getRC4client;
+		c.getRC4server = x.getRC4server;
+		c.isRC4initialized = x.isRC4initialized;
+		c.initRC4 = x.initRC4;
+		c.getMachineId = x.getMachineId;
+		c.getMachinePlatform = x.getMachinePlatform;
+		c.setMachinePlatform = x.setMachinePlatform;
+		c.setMachineId = x.setMachineId;
 
 		c.on('data', function(buffer: Buffer){
 

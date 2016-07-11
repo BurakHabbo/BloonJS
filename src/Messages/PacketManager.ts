@@ -3,6 +3,9 @@ import Incoming from './Incoming/Incoming';
 import ReleaseVersionMessageEvent from './Incoming/Handshake/ReleaseVersionMessageEvent';
 import InitCryptoMessageEvent from './Incoming/Handshake/InitCryptoMessageEvent';
 import GenerateSecretKeyMessageEvent from './Incoming/Handshake/GenerateSecretKeyMessageEvent';
+import ClientFlashVarsMessageEvent from './Incoming/Handshake/ClientFlashVarsMessageEvent';
+import UniqueIDMessageEvent from './Incoming/Handshake/UniqueIDMessageEvent';
+import SSOTicketMessageEvent from './Incoming/Handshake/SSOTicketMessageEvent';
 import GameClient from '../HabboHotel/GameClients/GameClient';
 import ClientMessage from './ClientMessage';
 import Emulator from '../Emulator';
@@ -51,5 +54,8 @@ export default class PacketManager {
 		this.registerHandler(Incoming.ReleaseVersionMessageEvent, ReleaseVersionMessageEvent);
 		this.registerHandler(Incoming.InitCryptoMessageEvent, InitCryptoMessageEvent);
 		this.registerHandler(Incoming.GenerateSecretKeyMessageEvent, GenerateSecretKeyMessageEvent);
+		this.registerHandler(Incoming.ClientFlashVarsMessageEvent, ClientFlashVarsMessageEvent);
+		this.registerHandler(Incoming.UniqueIDMessageEvent, UniqueIDMessageEvent);
+		this.registerHandler(Incoming.SSOTicketMessageEvent, SSOTicketMessageEvent);
 	}
 }
