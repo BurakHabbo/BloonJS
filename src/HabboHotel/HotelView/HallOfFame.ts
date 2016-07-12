@@ -24,7 +24,7 @@ export default class HallOfFame {
 		});
 	}
 
-	public putWinner(id: number, row) : void {
+	public putWinner(id: number, row): void {
 		this.winners[id] = new HallOfFameWinner(row);
 	}
 

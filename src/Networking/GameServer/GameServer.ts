@@ -39,6 +39,7 @@ export default class GameServer {
 		c.initDH = x.initDH;
 		c.getDiffieHellman = x.getDiffieHellman;
 		c.sendResponse = x.sendResponse;
+		c.sendResponses = x.sendResponses;
 		c.getRC4client = x.getRC4client;
 		c.getRC4server = x.getRC4server;
 		c.isRC4initialized = x.isRC4initialized;
@@ -47,6 +48,8 @@ export default class GameServer {
 		c.getMachinePlatform = x.getMachinePlatform;
 		c.setMachinePlatform = x.setMachinePlatform;
 		c.setMachineId = x.setMachineId;
+		c.setHabbo = x.setHabbo;
+		c.getHabbo = x.getHabbo;
 
 		c.on('data', function(buffer: Buffer){
 

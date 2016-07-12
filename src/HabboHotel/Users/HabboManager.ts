@@ -12,11 +12,11 @@ export default class HabboManager {
 	}
 
 	public addHabbo(habbo: Habbo): void {
-		//this.onlineHabbos[habbo.getHabboInfo().getId()] = habbo;
+		this.onlineHabbos[habbo.getHabboInfo().getId()] = habbo;
 	}
 
 	public removeHabbo(habbo: Habbo): void {
-		//this.onlineHabbos.slice(habbo.getHabboInfo().getId(), 1);
+		this.onlineHabbos.slice(habbo.getHabboInfo().getId(), 1);
 	}
 
 	public getHabbo(search: number | string): Habbo {
@@ -24,9 +24,9 @@ export default class HabboManager {
 			return this.onlineHabbos[<number>search];
 		}else if(typeof search == 'string'){
 			this.onlineHabbos.forEach(function(habbo: Habbo){
-				/*if(search.toString().toLowerCase() === habbo.getHabboInfo().getUsername().toLowerCase()){
+				if(search.toString().toLowerCase() === habbo.getHabboInfo().getUsername().toLowerCase()){
 					return habbo;
-				}*/
+				}
 			});
 		}
 	}
@@ -40,7 +40,7 @@ export default class HabboManager {
 
 					if(h != null){
 						//h.getClient().sendResponse(new GenericAlertComposer("You logged in from somewhere else."));
-						//h.getClient().destroy();
+						h.getClient().destroy();
 						h = null;
 					}
 

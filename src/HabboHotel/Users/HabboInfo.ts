@@ -35,6 +35,7 @@ export default class HabboInfo extends Runnable {
 
 	public constructor(row) {
 		super();
+		this.id = <number>row.id;
 		this.username = row.username;
 		this.realName = row.real_name;
 		this.motto = row.motto;
@@ -54,5 +55,69 @@ export default class HabboInfo extends Runnable {
 
 	public run(): void {
 
+	}
+
+	public getId(): number {
+		return this.id;
+	}
+
+	public getUsername(): string {
+		return this.username;
+	}
+
+	public getRealName(): string {
+		return this.realName;
+	}
+
+	public getMotto(): string {
+		return this.motto;
+	}
+
+	public getLook(): string {
+		return this.look;
+	}
+
+	public getGender(): HabboGender {
+		return this.gender;
+	}
+
+	public getMail(): string {
+		return this.mail;
+	}
+
+	public getSso(): string {
+		return this.sso;
+	}
+
+	public getIpRegister(): string {
+		return this.ipRegister;
+	}
+
+	public getRank(): number {
+		return this.rank;
+	}
+
+	public getAccountCreated(): number {
+		return this.accountCreated;
+	}
+
+	public getCredits(): number {
+		return this.credits;
+	}
+
+	public getHomeRoom(): number {
+		return this.homeRoom;
+	}
+
+	public getLastOnline(): number {
+		return this.lastOnline;
+	}
+
+	public isOnline(): boolean {
+		return this.online;
+	}
+
+	public setOnline(online: boolean): void {
+		this.online = online;
 	}
 }

@@ -6,6 +6,11 @@ import GenerateSecretKeyMessageEvent from './Incoming/Handshake/GenerateSecretKe
 import ClientFlashVarsMessageEvent from './Incoming/Handshake/ClientFlashVarsMessageEvent';
 import UniqueIDMessageEvent from './Incoming/Handshake/UniqueIDMessageEvent';
 import SSOTicketMessageEvent from './Incoming/Handshake/SSOTicketMessageEvent';
+import HotelViewRequestBonusRareEvent from './Incoming/HotelView/HotelViewRequestBonusRareEvent';
+import RequestNewsListEvent from './Incoming/HotelView/RequestNewsListEvent';
+import HotelViewDataEvent from './Incoming/HotelView/HotelViewDataEvent';
+import RequestFriendRequestsEvent from './Incoming/Friends/RequestFriendRequestsEvent';
+import RequestUserDataEvent from './Incoming/Users/RequestUserDataEvent';
 import GameClient from '../HabboHotel/GameClients/GameClient';
 import ClientMessage from './ClientMessage';
 import Emulator from '../Emulator';
@@ -17,6 +22,9 @@ export default class PacketManager {
 	public constructor() {
 		this.incoming = [];
 		this.registerHandshake();
+		this.registerHotelView();
+		this.registerFriends();
+		this.registerUsers();
 	}
 
 	public handlePacket(client: GameClient, packet: ClientMessage): void {
@@ -57,5 +65,19 @@ export default class PacketManager {
 		this.registerHandler(Incoming.ClientFlashVarsMessageEvent, ClientFlashVarsMessageEvent);
 		this.registerHandler(Incoming.UniqueIDMessageEvent, UniqueIDMessageEvent);
 		this.registerHandler(Incoming.SSOTicketMessageEvent, SSOTicketMessageEvent);
+	}
+
+	public registerHotelView(): void {
+		this.registerHandler(Incoming.HotelViewRequestBonusRareEvent, HotelViewRequestBonusRareEvent);
+		this.registerHandler(Incoming.RequestNewsListEvent, RequestNewsListEvent);
+		this.registerHandler(Incoming.HotelViewDataEvent, HotelViewDataEvent);
+	}
+
+	public registerFriends(): void {
+		this.registerHandler(Incoming.RequestFriendRequestsEvent, RequestFriendRequestsEvent);
+	}
+
+	public registerUsers(): void {
+		this.registerHandler(Incoming.RequestUserDataEvent, RequestUserDataEvent);
 	}
 }
