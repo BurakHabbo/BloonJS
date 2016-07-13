@@ -27,7 +27,6 @@ export default class SSOTicketMessageEvent extends MessageHandler {
 		}
 
 		Emulator.getGameEnvironment().getHabboManager().loadHabbo(sso, this.client, function(client: GameClient, habbo: Habbo){
-			//console.log(habbo.getHabboInfo());
 			habbo.setClient(client);
 			client.setHabbo(habbo);
 			//client.getHabbo().connect();

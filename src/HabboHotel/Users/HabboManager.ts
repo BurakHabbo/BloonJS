@@ -40,8 +40,10 @@ export default class HabboManager {
 
 					if(h != null){
 						//h.getClient().sendResponse(new GenericAlertComposer("You logged in from somewhere else."));
-						h.getClient().destroy();
-						h = null;
+						setTimeout(function(){
+							h.getClient().destroy();
+							h = null;
+						}, 2000);
 					}
 
 					let habbo = new Habbo(row);

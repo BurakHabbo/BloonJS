@@ -13,4 +13,6 @@ export default class Incoming {
 	public static RequestFriendRequestsEvent: number = 2485;
 
 	public static RequestUserDataEvent: number = 186;
+
+	public static RequestRoomDataEvent: number = 1164;
 }
