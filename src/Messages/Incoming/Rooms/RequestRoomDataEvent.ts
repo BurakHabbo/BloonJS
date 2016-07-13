@@ -12,6 +12,8 @@ export default class RequestRoomDataEvent extends MessageHandler {
 
 		Emulator.getGameEnvironment().getRoomManager().loadRoom(roomId, this.client, function(room: Room, client: GameClient){
 			if(room != null){
+				console.log(room);
+				
 				let unknown: boolean = true;
 
 				if(something == 0 && something2 == 1){

@@ -78,4 +78,8 @@ export default class RoomLayout {
 			}
 		}
 	}
+
+	public getName(): string {
+		return this.name;
+	}
 }

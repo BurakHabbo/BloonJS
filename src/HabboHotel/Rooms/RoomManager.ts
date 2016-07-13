@@ -40,7 +40,7 @@ export default class RoomManager {
 			connection.query('SELECT * FROM room_models', function(err, rows){
 				for(let i = 0; i < rows.length; i++){
 					let row = rows[i];
-					Emulator.getGameEnvironment().getRoomManager().addRoomModel(new RoomLayout(row));
+					Emulator.getGameEnvironment().getRoomManager().addRoomLayout(new RoomLayout(row));
 				}
 
 				connection.release();
@@ -76,7 +76,17 @@ export default class RoomManager {
 		this.roomCategories[id] = category;
 	}
 
-	public addRoomModel(layout: RoomLayout): void {
+	public addRoomLayout(layout: RoomLayout): void {
 		this.roomLayouts.push(layout);
+	}
+
+	public getLayout(name: string): RoomLayout {
+		for(let i = 0; i < this.roomLayouts.length; i++){
+			if(name == this.roomLayouts[i].getName()){
+				return this.roomLayouts[i];
+			}
+		}
+
+		return null;
 	}
 }

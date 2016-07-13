@@ -31,6 +31,7 @@ export default class Room {
 	private publicRoom: boolean;
 	private staffPromotedRoom: boolean;
 	private allowPets: boolean;
+	private allowPetsEat: boolean;
 	private allowWalkthrough: boolean;
 	private allowBotsWalk: boolean;
 	private hideWall: boolean;
@@ -84,5 +85,101 @@ export default class Room {
 
 	public constructor(row) {
 		this.id = <number>row.id;
+		this.ownerId = <number>row.owner_id;
+		this.ownerName = row.owner_name;
+		this.name = row.name;
+		this.description = row.description;
+		this.layout = Emulator.getGameEnvironment().getRoomManager().getLayout(row.model);
+		this.password = row.password;
+		this.state = RoomState.valueOf(row.state.toUpperCase());
+		this.usersMax = <number>row.users_max;
+		this.score = <number>row.score;
+		this.category = <number>row.category;
+		this.floorPaint = row.paper_floor;
+		this.wallPaint = row.paper_wall;
+		this.backgroundPaint = row.paper_landscape;
+		this.wallSize = <number>row.thickness_wall;
+		this.wallHeight = <number>row.wall_height;
+		this.floorSize = <number>row.thickness_floor;
+		this.tags = row.tags;
+		this.publicRoom = row.is_public == 1;
+		this.staffPromotedRoom = row.is_staff_picked == 1;
+		this.allowPets = row.allow_other_pets == 1;
+		this.allowPetsEat = row.allow_other_pets_eat == 1;
+		this.allowWalkthrough = row.allow_walkthrough == 1;
+		this.hideWall = row.allow_hidewall == 1;
+		this.chatMode = <number>row.chat_mode;
+		this.chatWeight = <number>row.chat_weight;
+		this.chatSpeed = <number>row.chat_speed;
+		this.chatDistance = <number>row.chat_hearing_distance;
+		this.chatProtection = <number>row.chat_protection;
+		this.muteOption = <number>row.who_can_mute;
+		this.kickOption = <number>row.who_can_kick;
+		this.banOption = <number>row.who_can_ban;
+		this.pollId = <number>row.poll_id;
+		this.guild = <number>row.guild_id;
+		this.rollerSpeed = <number>row.roller_speed;
+		this.overrideModel = row.override_model == 1;
+		if(this.overrideModel){
+
+		}
+
+		this.promoted = row.promoted == 1;
+		if(this.promoted){
+
+		}
+
+		this.tradeMode = <number>row.trade_mode;
+		this.preLoaded = true;
+		this.allowBotsWalk = true;
+
+		this.currentHabbos = new Array<Habbo>();
+		this.habboQueue = new Array<Habbo>();
+		//this.currentBots = new Array<Bot>();
+		//this.currentPets = new Array<AbstractPet>();
+		this.furniOwnerNames = new Array<string>();
+		this.furniOwnerCount = new Array<number>();
+		//this.roomItems = new Array<HabboItem>();
+		this.wordFilterWords = new Array<string>();
+		//this.moodlightData = new Array<RoomMoodlightData>();
+
+		this.mutedHabbos = new Array<number>();
+		//this.bannedHabbos = new Array<RoomBan>();
+		//this.games = new Array<Game>();
+		//this.activeTrades = new Array<RoomTrade>();
+		this.rights = new Array<number>();
+		this.wiredHighscoreData = new Array();
+	}
+
+	public getId(): number {
+		return this.id;
+	}
+
+	public getName(): string {
+		return this.name;
+	}
+
+	public isPublicRoom(): boolean {
+		return this.publicRoom;
+	}
+
+	public getOwnerId(): number {
+		return this.ownerId;
+	}
+
+	public getOwnerName(): string {
+		return this.ownerName;
+	}
+
+	public getState(): RoomState {
+		return this.state;
+	}
+
+	public getUsersCount(): number {
+		return this.currentHabbos.length;
+	}
+
+	public getUsersMax(): number {
+		return this.usersMax;
 	}
 }

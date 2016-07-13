@@ -21,4 +21,5 @@ export default class Outgoing {
 	public static LoadFriendRequestsComposer: number = 2757;
 	public static UserDataComposer: number = 1823;
 	public static ForwardToRoomComposer: number = 1963;
+	public static RoomDataComposer: number = 2224;
 }

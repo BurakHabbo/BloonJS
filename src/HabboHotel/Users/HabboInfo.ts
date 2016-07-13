@@ -1,6 +1,7 @@
 import Runnable from '../../Threading/Runnable';
 import Emulator from '../../Emulator';
 import HabboGender from './HabboGender';
+import Room from '../Rooms/Room';
 
 export default class HabboInfo extends Runnable {
 	private username: string;
@@ -24,7 +25,7 @@ export default class HabboInfo extends Runnable {
 
 	private online: boolean;
 	private loadingRoom: number;
-	//private currentRoom: Room;
+	private currentRoom: Room;
 	private roomQueueId: number;
 
 	//private riding: HorsePet;
@@ -50,7 +51,7 @@ export default class HabboInfo extends Runnable {
 		this.homeRoom = <number>row.home_room;
 		this.lastOnline = Emulator.getIntUnixTimestamp();
 		this.online = false;
-		//this.currentRoom = null;
+		this.currentRoom = null;
 	}
 
 	public run(): void {
@@ -115,6 +116,10 @@ export default class HabboInfo extends Runnable {
 
 	public isOnline(): boolean {
 		return this.online;
+	}
+
+	public getCurrentRoom(): Room {
+		return this.currentRoom;
 	}
 
 	public setOnline(online: boolean): void {
