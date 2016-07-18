@@ -14,6 +14,6 @@ export default class RequestRoomLoadEvent extends MessageHandler {
 			this.client.getHabbo().getHabboInfo().setCurrentRoom(null);
 		}
 
-		Emulator.getGameEnvironment().getRoomManager().enterRoom(this.client.getHabbo(), roomId, password);
+		Emulator.getGameEnvironment().getRoomManager().prepareRoom(this.client.getHabbo(), roomId, password);
 	}
 }

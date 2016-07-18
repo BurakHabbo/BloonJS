@@ -38,7 +38,7 @@ export default class ServerMessage {
 		let buffer: Buffer = new Buffer(4);
 
 		if(typeof value == 'number'){
-			buffer.writeUInt32BE(<number>value, 0);
+			buffer.writeInt32BE(<number>value, 0);
 		}else if(typeof value == 'string'){
 			buffer.writeUInt32BE(value.toString().charCodeAt(0), 0);
 		}else if(typeof value == 'boolean'){

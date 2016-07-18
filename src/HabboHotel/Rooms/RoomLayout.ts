@@ -95,6 +95,22 @@ export default class RoomLayout {
 		return this.mapSizeY;
 	}
 
+	public getDoorX(): number {
+		return this.doorX;
+	}
+
+	public getDoorY(): number {
+		return this.doorY;
+	}
+
+	public getDoorZ(): number {
+		return this.doorZ;
+	}
+
+	public getDoorDirection(): number {
+		return this.doorDirection;
+	}
+
 	public getSquareStates(): Array<Array<RoomTileState>> {
 		return this.squareStates;
 	}

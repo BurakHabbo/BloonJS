@@ -5,6 +5,7 @@ import RoomState from './RoomState';
 import RoomOwnerComposer from '../../Messages/Outgoing/Rooms/RoomOwnerComposer';
 import RoomRightsComposer from '../../Messages/Outgoing/Rooms/RoomRightsComposer';
 import RoomRightLevels from './RoomRightLevels';
+import ServerMessage from '../../Messages/ServerMessage';
 
 export default class Room {
 	private id: number;
@@ -152,6 +153,12 @@ export default class Room {
 		//this.activeTrades = new Array<RoomTrade>();
 		this.rights = new Array<number>();
 		this.wiredHighscoreData = new Array();
+
+		this.loadData();
+	}
+
+	public loadData(): void {
+		this.unitCounter = 0;
 	}
 
 	public getId(): number {
@@ -293,5 +300,22 @@ export default class Room {
         habbo.getClient().sendResponse(new RoomRightsComposer(RoomRightLevels.MODERATOR));
         //habbo.getRoomUnit().getStatus().put("flatctrl", RoomRightLevels.MODERATOR.level + "");
         //habbo.getClient().sendResponse(new RoomRightsListComposer(this));
+	}
+
+	public addHabbo(habbo: Habbo): void {
+		this.currentHabbos[habbo.getHabboInfo().getId()] = habbo;
+		this.unitCounter++;
+	}
+
+	public getUnitCounter(): number {
+		return this.unitCounter;
+	}
+
+	public sendComposer(message: ServerMessage): void {
+		let keys = Object.keys(this.currentHabbos);
+
+		for(let i = 0; i < keys.length; i++){
+			this.currentHabbos[keys[i]].getClient().sendResponse(message);
+		}
 	}
 }

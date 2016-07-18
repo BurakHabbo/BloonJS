@@ -12,6 +12,8 @@ export default class RequestRoomHeightmapEvent extends MessageHandler {
 				if(room != null){
 					client.sendResponse(new RoomRelativeMapComposer(room));
 					client.sendResponse(new RoomHeightMapComposer(room));
+
+					Emulator.getGameEnvironment().getRoomManager().enterRoom(client.getHabbo(), room);
 				}
 			});
 		}

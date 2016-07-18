@@ -11,6 +11,9 @@ import RoomEnterErrorComposer from '../../Messages/Outgoing/Rooms/RoomEnterError
 import RoomOpenComposer from '../../Messages/Outgoing/Rooms/RoomOpenComposer';
 import RoomModelComposer from '../../Messages/Outgoing/Rooms/RoomModelComposer';
 import RoomPaintComposer from '../../Messages/Outgoing/Rooms/RoomPaintComposer';
+import RoomUsersComposer from '../../Messages/Outgoing/Rooms/Users/RoomUsersComposer';
+import PathFinder from '../../Util/Pathfinding/PathFinder';
+import RoomUserRotation from './RoomUserRotation';
 
 export default class RoomManager {
 	private roomCategories: Array<RoomCategory>;
@@ -98,7 +101,7 @@ export default class RoomManager {
 		return null;
 	}
 
-	public enterRoom(habbo: Habbo, roomId: number, password: string, overrideChecks?: boolean, doorLocation?: Tile): void {
+	public prepareRoom(habbo: Habbo, roomId: number, password: string, overrideChecks?: boolean, doorLocation?: Tile): void {
 		if(overrideChecks == null){
 			overrideChecks = false;
 		}
@@ -148,5 +151,33 @@ export default class RoomManager {
 		habbo.getClient().sendResponse(new RoomPaintComposer("landscape", room.getBackgroundPaint()));
 
 		room.refreshRightsForHabbo(habbo);
+	}
+
+	public enterRoom(habbo: Habbo, room: Room): void {
+		if(habbo.getHabboInfo().getLoadingRoom() != room.getId()){
+			//habbo.getClient().sendResponse(new HotelViewComposer());
+			return;
+		}
+
+		habbo.getHabboInfo().setCurrentRoom(room);
+		habbo.getRoomUnit().setHandItem(0);
+		habbo.getRoomUnit().setEffectId(0);
+		habbo.getRoomUnit().setPathFinder(new PathFinder(habbo.getRoomUnit()));
+
+		if(!habbo.getRoomUnit().isTeleporting()){
+			habbo.getRoomUnit().setGoalLocation(room.getLayout().getDoorX(), room.getLayout().getDoorY());
+			habbo.getRoomUnit().setX(room.getLayout().getDoorX());
+			habbo.getRoomUnit().setY(room.getLayout().getDoorY());
+			habbo.getRoomUnit().setZ(room.getLayout().getDoorZ());
+			habbo.getRoomUnit().setBodyRotation(RoomUserRotation.EAST);//room.getLayout().getDoorDirection()
+			habbo.getRoomUnit().setHeadRotation(RoomUserRotation.EAST);//room.getLayout().getDoorDirection()
+		}
+
+		habbo.getRoomUnit().setPathFinderRoom(room);
+        habbo.getRoomUnit().resetIdleTimer();
+        room.addHabbo(habbo);
+        habbo.getRoomUnit().setId(room.getUnitCounter());
+
+        room.sendComposer(new RoomUsersComposer(habbo).compose());
 	}
 }
