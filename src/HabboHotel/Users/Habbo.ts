@@ -2,11 +2,17 @@ import GameClient from '../GameClients/GameClient';
 import Runnable from '../../Threading/Runnable';
 import HabboInfo from './HabboInfo';
 import Messenger from '../Messenger/Messenger';
+import Emulator from '../../Emulator';
+import RoomUnit from '../Rooms/RoomUnit';
 
 export default class Habbo extends Runnable {
 	private client: GameClient;
+
 	private habboInfo: HabboInfo;
+	//private habboStats: HabboStats;
 	private messenger: Messenger;
+	//private habboInventory: HabboInventory;
+	private roomUnit: RoomUnit;
 
 	private update: boolean;
 	private disconnected: boolean;
@@ -43,5 +49,17 @@ export default class Habbo extends Runnable {
 
 	public getClient(): GameClient {
 		return this.client;
+	}
+
+	public getRoomUnit(): RoomUnit {
+		return this.roomUnit;
+	}
+
+	public setRoomUnit(roomUnit: RoomUnit): void {
+		this.roomUnit = roomUnit;
+	}
+
+	public hasPermission(key: string): boolean {
+		return Emulator.getGameEnvironment().getPermissionsManager().hasPermission(this, key);
 	}
 }

@@ -2,6 +2,9 @@ import RoomLayout from './RoomLayout';
 import Emulator from '../../Emulator';
 import Habbo from '../Users/Habbo';
 import RoomState from './RoomState';
+import RoomOwnerComposer from '../../Messages/Outgoing/Rooms/RoomOwnerComposer';
+import RoomRightsComposer from '../../Messages/Outgoing/Rooms/RoomRightsComposer';
+import RoomRightLevels from './RoomRightLevels';
 
 export default class Room {
 	private id: number;
@@ -181,5 +184,114 @@ export default class Room {
 
 	public getUsersMax(): number {
 		return this.usersMax;
+	}
+
+	public getDescription(): string {
+		return this.description;
+	}
+
+	public getScore(): number {
+		return this.score;
+	}
+
+	public getCategory(): number {
+		return this.category;
+	}
+
+	public getTags(): string {
+		return this.tags;
+	}
+
+	public getGuildId(): number {
+		return this.guild;
+	}
+
+	public isPromoted(): boolean {
+		return this.promoted;
+	}
+
+	public isStaffPromotedRoom(): boolean {
+		return this.staffPromotedRoom;
+	}
+
+	public isMuted(): boolean {
+		return this.muted;
+	}
+
+	public getMuteOption(): number {
+		return this.muteOption;
+	}
+
+	public getKickOption(): number {
+		return this.kickOption;
+	}
+
+	public getBanOption(): number {
+		return this.banOption;
+	}
+
+	public getChatMode(): number {
+		return this.chatMode;
+	}
+
+	public getChatWeight(): number {
+		return this.chatWeight;
+	}
+
+	public getChatSpeed(): number {
+		return this.chatSpeed;
+	}
+
+	public getChatDistance(): number {
+		return this.chatDistance;
+	}
+
+	public getChatProtection(): number {
+		return this.chatProtection;
+	}
+
+	public getLayout(): RoomLayout {
+		return this.layout;
+	}
+
+	public getFloorPaint(): string {
+		return this.floorPaint;
+	}
+
+	public getWallPaint(): string {
+		return this.wallPaint;
+	}
+
+	public getBackgroundPaint(): string {
+		return this.backgroundPaint;
+	}
+
+	public getWallHeight(): number {
+		return this.wallHeight;
+	}
+
+	public isOwner(habbo: Habbo): boolean {
+		return habbo.getHabboInfo().getId() == this.ownerId || habbo.hasPermission("acc_anyroomowner");
+	}
+
+	public hasRights(habbo: Habbo): boolean {
+		return this.isOwner(habbo) || this.rights.indexOf(habbo.getHabboInfo().getId()) > -1;
+	}
+
+	public isBanned(value: Habbo | number): boolean {
+		if(value instanceof Habbo){
+			return this.isBanned(value.getHabboInfo().getId());
+		}else if(typeof value == "number"){
+			//let ban: RoomBan = this.bannedHabbos[value];
+			//return ban != null && ban.endTimestamp >= Emulator.getIntUnixTimestamp();
+			return false;
+		}
+	}
+
+	public refreshRightsForHabbo(habbo: Habbo): void {
+		habbo.getClient().sendResponse(new RoomOwnerComposer());
+        habbo.getClient().sendResponse(new RoomRightsComposer(RoomRightLevels.MODERATOR));
+        //habbo.getRoomUnit().getStatus().put("flatctrl", RoomRightLevels.MODERATOR.level + "");
+        //habbo.getClient().sendResponse(new RoomRightsListComposer(this));
 	}
 }

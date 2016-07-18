@@ -122,7 +122,19 @@ export default class HabboInfo extends Runnable {
 		return this.currentRoom;
 	}
 
+	public setCurrentRoom(room: Room): void {
+		this.currentRoom = room;
+	}
+
 	public setOnline(online: boolean): void {
 		this.online = online;
+	}
+
+	public setLoadingRoom(roomId: number): void {
+		this.loadingRoom = roomId;
+	}
+
+	public getLoadingRoom(): number {
+		return this.loadingRoom;
 	}
 }

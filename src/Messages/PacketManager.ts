@@ -12,6 +12,8 @@ import HotelViewDataEvent from './Incoming/HotelView/HotelViewDataEvent';
 import RequestFriendRequestsEvent from './Incoming/Friends/RequestFriendRequestsEvent';
 import RequestUserDataEvent from './Incoming/Users/RequestUserDataEvent';
 import RequestRoomDataEvent from './Incoming/Rooms/RequestRoomDataEvent';
+import RequestRoomLoadEvent from './Incoming/Rooms/RequestRoomLoadEvent';
+import RequestRoomHeightmapEvent from './Incoming/Rooms/RequestRoomHeightmapEvent';
 import GameClient from '../HabboHotel/GameClients/GameClient';
 import ClientMessage from './ClientMessage';
 import Emulator from '../Emulator';
@@ -85,5 +87,7 @@ export default class PacketManager {
 
 	public registerRooms(): void {
 		this.registerHandler(Incoming.RequestRoomDataEvent, RequestRoomDataEvent);
+		this.registerHandler(Incoming.RequestRoomLoadEvent, RequestRoomLoadEvent);
+		this.registerHandler(Incoming.RequestRoomHeightmapEvent, RequestRoomHeightmapEvent);
 	}
 }

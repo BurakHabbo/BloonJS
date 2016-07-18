@@ -3,6 +3,14 @@ import RoomCategory from './RoomCategory';
 import RoomLayout from './RoomLayout';
 import Room from './Room';
 import GameClient from '../GameClients/GameClient';
+import Habbo from '../Users/Habbo';
+import Tile from '../../Util/Pathfinding/Tile';
+import RoomState from './RoomState';
+import RoomUnit from './RoomUnit';
+import RoomEnterErrorComposer from '../../Messages/Outgoing/Rooms/RoomEnterErrorComposer';
+import RoomOpenComposer from '../../Messages/Outgoing/Rooms/RoomOpenComposer';
+import RoomModelComposer from '../../Messages/Outgoing/Rooms/RoomModelComposer';
+import RoomPaintComposer from '../../Messages/Outgoing/Rooms/RoomPaintComposer';
 
 export default class RoomManager {
 	private roomCategories: Array<RoomCategory>;
@@ -88,5 +96,57 @@ export default class RoomManager {
 		}
 
 		return null;
+	}
+
+	public enterRoom(habbo: Habbo, roomId: number, password: string, overrideChecks?: boolean, doorLocation?: Tile): void {
+		if(overrideChecks == null){
+			overrideChecks = false;
+		}
+
+		this.loadRoom(roomId, habbo.getClient(), function(room: Room, client: GameClient){
+			if(room == null)
+				return;
+			//||(room.hasGuild() && room.guildRightLevel(habbo) > 2)) TODO
+			if(overrideChecks || room.isOwner(client.getHabbo()) || room.getState() == RoomState.OPEN || room.getState() == RoomState.INVISIBLE || client.getHabbo().hasPermission("acc_anyroomowner") || client.getHabbo().hasPermission("acc_enteranyroom") || room.hasRights(client.getHabbo())){
+				Emulator.getGameEnvironment().getRoomManager().openRoom(client.getHabbo(), room, doorLocation);
+			}
+		});
+	}
+
+	public openRoom(habbo: Habbo, room: Room, doorLocation: Tile): void {
+		if(room == null)
+			return;
+
+		//if (Emulator.getConfig().getBoolean("hotel.room.enter.logs"))
+			//this.logEnter(habbo, room);
+
+		if(habbo.getRoomUnit() == null)
+			habbo.setRoomUnit(new RoomUnit());
+
+		if(room.isBanned(habbo)){
+			habbo.getClient().sendResponse(new RoomEnterErrorComposer(RoomEnterErrorComposer.ROOM_ERROR_BANNED));
+			return;
+		}
+
+		if(room.getUsersCount() >= room.getUsersMax() && !habbo.hasPermission("acc_fullrooms")){
+			habbo.getClient().sendResponse(new RoomEnterErrorComposer(RoomEnterErrorComposer.ROOM_ERROR_GUESTROOM_FULL));
+			return;
+		}
+
+		habbo.getRoomUnit().clearStatus();
+		habbo.getClient().sendResponse(new RoomOpenComposer());
+		habbo.getRoomUnit().setInRoom(true);
+		habbo.getHabboInfo().setLoadingRoom(room.getId());
+		habbo.getClient().sendResponse(new RoomModelComposer(room));
+
+		if(room.getWallPaint() != "0.0")
+			habbo.getClient().sendResponse(new RoomPaintComposer("wallpaper", room.getWallPaint()));
+
+		if(room.getFloorPaint() != "0.0")
+			habbo.getClient().sendResponse(new RoomPaintComposer("floor", room.getFloorPaint()));
+
+		habbo.getClient().sendResponse(new RoomPaintComposer("landscape", room.getBackgroundPaint()));
+
+		room.refreshRightsForHabbo(habbo);
 	}
 }

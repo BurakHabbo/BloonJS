@@ -6,6 +6,7 @@ import ItemManager from './Items/ItemManager';
 import CatalogManager from './Catalog/CatalogManager';
 import RoomManager from './Rooms/RoomManager';
 import NavigatorManager from './Navigation/NavigatorManager';
+import PermissionsManager from './Permissions/PermissionsManager';
 
 export default class GameEnvironment {
 	private habboManager: HabboManager;
@@ -15,6 +16,7 @@ export default class GameEnvironment {
 	private catalogManager: CatalogManager;
 	private roomManager: RoomManager;
 	private navigatorManager: NavigatorManager;
+	private permissionsManager: PermissionsManager;
 
 	public load(): void {
 		Emulator.getLogging().logStart('GameEnvironment -> Loading...');
@@ -26,6 +28,7 @@ export default class GameEnvironment {
 		this.catalogManager = new CatalogManager();
 		this.roomManager = new RoomManager();
 		this.navigatorManager = new NavigatorManager();
+		this.permissionsManager = new PermissionsManager();
 
 		Emulator.getLogging().logStart('GameEnvironment -> Loaded!');
 	}
@@ -56,5 +59,9 @@ export default class GameEnvironment {
 
 	public getNavigatorManager(): NavigatorManager {
 		return this.navigatorManager;
+	}
+
+	public getPermissionsManager(): PermissionsManager {
+		return this.permissionsManager;
 	}
 }

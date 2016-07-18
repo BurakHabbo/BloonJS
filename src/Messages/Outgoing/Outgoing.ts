@@ -22,4 +22,11 @@ export default class Outgoing {
 	public static UserDataComposer: number = 1823;
 	public static ForwardToRoomComposer: number = 1963;
 	public static RoomDataComposer: number = 2224;
+	public static RoomEnterErrorComposer: number = 1864;
+	public static RoomOpenComposer: number = 1329;
+	public static RoomModelComposer: number = 2029;
+	public static RoomPaintComposer: number = 1328;
+	public static RoomOwnerComposer: number = 495;
+	public static RoomRelativeMapComposer: number = 207;
+	public static RoomHeightMapComposer: number = 1112;
 }

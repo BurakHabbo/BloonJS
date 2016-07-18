@@ -82,4 +82,34 @@ export default class RoomLayout {
 	public getName(): string {
 		return this.name;
 	}
+
+	public getMapSize(): number {
+		return this.mapSize;
+	}
+
+	public getMapSizeX(): number {
+		return this.mapSizeX;
+	}
+
+	public getMapSizeY(): number {
+		return this.mapSizeY;
+	}
+
+	public getSquareStates(): Array<Array<RoomTileState>> {
+		return this.squareStates;
+	}
+
+	public getSquareHeights(): Array<Array<number>> {
+		return this.squareHeights;
+	}
+
+	public getRelativeMap(): string {
+		let heightmap: string = this.heightmap;
+
+		for(let i = 0; i < 50; i++){
+			heightmap = heightmap.replace("\r\n", "\r");
+		}
+
+		return heightmap;
+	}
 }

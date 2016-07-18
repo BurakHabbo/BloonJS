@@ -15,4 +15,6 @@ export default class Incoming {
 	public static RequestUserDataEvent: number = 186;
 
 	public static RequestRoomDataEvent: number = 1164;
+	public static RequestRoomLoadEvent: number = 407;
+	public static RequestRoomHeightmapEvent: number = 2125;
 }
