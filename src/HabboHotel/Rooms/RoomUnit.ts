@@ -3,6 +3,7 @@ import DanceType from '../Users/DanceType';
 import RoomUnitType from './RoomUnitType';
 import Room from './Room';
 import PathFinder from '../../Util/Pathfinding/PathFinder';
+import Emulator from '../../Emulator';
 
 export default class RoomUnit {
 	private id: number;
@@ -45,6 +46,28 @@ export default class RoomUnit {
 	private modMuteTime: number;
 	private idleTimer: number;
 	private room: Room;
+
+	public constructor() {
+		this.id = 0;
+		this.x = 0;
+		this.y = 0;
+		this.z = 0.0;
+		this.inRoom = false;
+		this.canWalk = true;
+		this.status = new Array<string>();
+		this.cacheable = new Array<Object>();
+		this.roomUnitType = RoomUnitType.UNKNOWN;
+		this.bodyRotation = RoomUserRotation.NORTH;
+		this.bodyRotation = RoomUserRotation.NORTH;
+		this.danceType = DanceType.NONE;
+		this.pathFinder = new PathFinder(this);
+		this.handItem = 0;
+		this.handItemTimestamp = 0;
+		this.walkTimeOut = Emulator.getIntUnixTimestamp();
+		this.effectId = 0;
+		this.wiredMuted = false;
+		this.modMuted = false;
+	}
 
 	public clearStatus(): void {
 		this.status = new Array<string>();
@@ -131,5 +154,37 @@ export default class RoomUnit {
 
 	public getBodyRotation(): RoomUserRotation {
 		return this.bodyRotation;
+	}
+
+	public getHeadRotation(): RoomUserRotation {
+		return this.headRotation;
+	}
+
+	public getStatus(): Array<string> {
+		return this.status;
+	}
+
+	public containsStatus(status: string): boolean {
+		return status in this.status;
+	}
+
+	public removeStatus(status: string): void {
+		delete this.status[status];
+	}
+
+	public addStatus(status: string, value: string): void {
+		this.status[status] = value;
+	}
+
+	public getIdleTimer(): number {
+		return this.idleTimer;
+	}
+
+	public isIdle(): boolean {
+		return this.idleTimer > Emulator.getConfig().getInt("hotel.roomuser.idle.cycles", 240);
+	}
+
+	public increaseIdleTimer(): void {
+		this.idleTimer++;
 	}
 }

@@ -11,7 +11,12 @@ import RoomEnterErrorComposer from '../../Messages/Outgoing/Rooms/RoomEnterError
 import RoomOpenComposer from '../../Messages/Outgoing/Rooms/RoomOpenComposer';
 import RoomModelComposer from '../../Messages/Outgoing/Rooms/RoomModelComposer';
 import RoomPaintComposer from '../../Messages/Outgoing/Rooms/RoomPaintComposer';
+import HotelViewComposer from '../../Messages/Outgoing/HotelView/HotelViewComposer';
 import RoomUsersComposer from '../../Messages/Outgoing/Rooms/Users/RoomUsersComposer';
+import RoomUserStatusComposer from '../../Messages/Outgoing/Rooms/Users/RoomUserStatusComposer';
+import RoomPaneComposer from '../../Messages/Outgoing/Rooms/RoomPaneComposer';
+import RoomThicknessComposer from '../../Messages/Outgoing/Rooms/RoomThicknessComposer';
+import RoomDataComposer from '../../Messages/Outgoing/Rooms/RoomDataComposer';
 import PathFinder from '../../Util/Pathfinding/PathFinder';
 import RoomUserRotation from './RoomUserRotation';
 
@@ -72,6 +77,7 @@ export default class RoomManager {
 					if(rows.length == 1){
 						let row = rows[0];
 						room = new Room(row);
+						Emulator.getGameEnvironment().getRoomManager().addRoom(room);
 						cb(room, client);
 					}else{
 						cb(null, client);
@@ -81,6 +87,14 @@ export default class RoomManager {
 				});
 			});
 		}
+	}
+
+	public addRoom(room: Room): void {
+		this.activeRooms[room.getId()] = room;
+	}
+
+	public getRoom(id: number): Room {
+		return this.activeRooms[id] ? this.activeRooms[id] : null;
 	}
 
 	public putRoomCategory(id: number, category: RoomCategory): void {
@@ -155,7 +169,7 @@ export default class RoomManager {
 
 	public enterRoom(habbo: Habbo, room: Room): void {
 		if(habbo.getHabboInfo().getLoadingRoom() != room.getId()){
-			//habbo.getClient().sendResponse(new HotelViewComposer());
+			habbo.getClient().sendResponse(new HotelViewComposer());
 			return;
 		}
 
@@ -168,7 +182,8 @@ export default class RoomManager {
 			habbo.getRoomUnit().setGoalLocation(room.getLayout().getDoorX(), room.getLayout().getDoorY());
 			habbo.getRoomUnit().setX(room.getLayout().getDoorX());
 			habbo.getRoomUnit().setY(room.getLayout().getDoorY());
-			habbo.getRoomUnit().setZ(room.getLayout().getDoorZ());
+			//habbo.getRoomUnit().setZ(room.getLayout().getDoorZ());
+			habbo.getRoomUnit().setZ(0.0);
 			habbo.getRoomUnit().setBodyRotation(RoomUserRotation.EAST);//room.getLayout().getDoorDirection()
 			habbo.getRoomUnit().setHeadRotation(RoomUserRotation.EAST);//room.getLayout().getDoorDirection()
 		}
@@ -179,5 +194,19 @@ export default class RoomManager {
         habbo.getRoomUnit().setId(room.getUnitCounter());
 
         room.sendComposer(new RoomUsersComposer(habbo).compose());
+        room.sendComposer(new RoomUserStatusComposer(habbo.getRoomUnit()).compose());
+
+		habbo.getClient().sendResponse(new RoomUsersComposer(room.getCurrentHabbos()));
+		habbo.getClient().sendResponse(new RoomUserStatusComposer(room.getCurrentHabbos()));
+
+		habbo.getClient().sendResponse(new RoomPaneComposer(room, room.isOwner(habbo)));
+
+		//habbo.getClient().sendResponse(new RoomWallItemsComposer(room));
+		//habbo.getClient().sendResponse(new RoomFloorItemsComposer(room));
+		habbo.getClient().sendResponse(new RoomThicknessComposer(room));
+
+		habbo.getClient().sendResponse(new RoomDataComposer(room, habbo.getClient().getHabbo(), false, true));
+
+		habbo.getHabboInfo().setLoadingRoom(0);
 	}
 }

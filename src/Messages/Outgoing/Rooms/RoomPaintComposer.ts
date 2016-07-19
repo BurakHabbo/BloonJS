@@ -14,7 +14,7 @@ export default class RoomPaintComposer extends MessageComposer {
 	public compose(): ServerMessage {
 		this.response.init(Outgoing.RoomPaintComposer);
 		this.response.appendString(this.type.toString());
-		this.response.appendString(this.value.toString()+".0");
+		this.response.appendString(this.value.toString());
 
 		return this.response;
 	}

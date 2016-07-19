@@ -4,10 +4,14 @@ import Habbo from '../Users/Habbo';
 import RoomState from './RoomState';
 import RoomOwnerComposer from '../../Messages/Outgoing/Rooms/RoomOwnerComposer';
 import RoomRightsComposer from '../../Messages/Outgoing/Rooms/RoomRightsComposer';
+import RoomUnitIdleComposer from '../../Messages/Outgoing/Rooms/Users/RoomUnitIdleComposer';
+import RoomUserStatusComposer from '../../Messages/Outgoing/Rooms/Users/RoomUserStatusComposer';
 import RoomRightLevels from './RoomRightLevels';
 import ServerMessage from '../../Messages/ServerMessage';
+import Runnable from '../../Threading/Runnable';
+import RoomUnit from './RoomUnit';
 
-export default class Room {
+export default class Room extends Runnable {
 	private id: number;
 	private ownerId: number;
 	private ownerName: string;
@@ -88,6 +92,7 @@ export default class Room {
 	private preventUncaching: boolean = false;
 
 	public constructor(row) {
+		super();
 		this.id = <number>row.id;
 		this.ownerId = <number>row.owner_id;
 		this.ownerName = row.owner_name;
@@ -157,8 +162,68 @@ export default class Room {
 		this.loadData();
 	}
 
+	public run(): void {
+		if(this.loaded){
+			this.cycle();
+		}
+	}
+
+	public cycle(): void {
+		let currentTimestamp: number = Emulator.getIntUnixTimestamp();
+
+		let foundRightHolder: boolean = false;
+
+		if(this.loaded){
+			if(this.currentHabbos.length > 0){
+				this.idleCycles = 0;
+			}
+
+			let updatedUnit: Array<RoomUnit> = new Array<RoomUnit>();
+			let toKick: Array<Habbo> = new Array<Habbo>();
+
+			let keys = Object.keys(this.currentHabbos);
+
+			for(let i = 0; i < keys.length; i++){
+				let habbo: Habbo = this.currentHabbos[keys[i]];
+
+				if(!foundRightHolder){
+					foundRightHolder = this.isOwner(habbo);
+				}
+
+				if(Emulator.getConfig().getBoolean("hotel.rooms.auto.idle")){
+					if(!habbo.getRoomUnit().isIdle()){
+						habbo.getRoomUnit().increaseIdleTimer();
+
+						if(habbo.getRoomUnit().isIdle()){
+							this.sendComposer(new RoomUnitIdleComposer(habbo.getRoomUnit()).compose());
+						}
+					}else{
+						habbo.getRoomUnit().increaseIdleTimer();
+
+						if (habbo.getRoomUnit().getIdleTimer() >= Emulator.getConfig().getInt("hotel.roomuser.idle.cycles.kick", 480)){
+							toKick.push(habbo);
+						}
+					}
+				}
+
+				if(habbo.getRoomUnit().containsStatus("sign")){
+					this.sendComposer(new RoomUserStatusComposer(habbo.getRoomUnit()).compose());
+					habbo.getRoomUnit().removeStatus("sign");
+				}
+			}
+		}
+	}
+
 	public loadData(): void {
 		this.unitCounter = 0;
+		this.loaded = true;
+		Emulator.getThreading().schedule(this, 500);
+	}
+
+	public unIdle(habbo: Habbo): void {
+		habbo.getRoomUnit().resetIdleTimer();
+
+		this.sendComposer(new RoomUnitIdleComposer(habbo.getRoomUnit()).compose());
 	}
 
 	public getId(): number {
@@ -277,6 +342,18 @@ export default class Room {
 		return this.wallHeight;
 	}
 
+	public isHideWall(): boolean {
+		return this.hideWall;
+	}
+
+	public getWallSize(): number {
+		return this.wallSize;
+	}
+
+	public getFloorSize(): number {
+		return this.floorSize;
+	}
+
 	public isOwner(habbo: Habbo): boolean {
 		return habbo.getHabboInfo().getId() == this.ownerId || habbo.hasPermission("acc_anyroomowner");
 	}
@@ -311,9 +388,13 @@ export default class Room {
 		return this.unitCounter;
 	}
 
+	public getCurrentHabbos(): Array<Habbo> {
+		return this.currentHabbos;
+	}
+
 	public sendComposer(message: ServerMessage): void {
 		let keys = Object.keys(this.currentHabbos);
-
+		
 		for(let i = 0; i < keys.length; i++){
 			this.currentHabbos[keys[i]].getClient().sendResponse(message);
 		}

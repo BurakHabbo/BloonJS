@@ -30,4 +30,9 @@ export default class Outgoing {
 	public static RoomRelativeMapComposer: number = 207;
 	public static RoomHeightMapComposer: number = 1112;
 	public static RoomUsersComposer: number = 2422;
+	public static HotelViewComposer: number = 1898;
+	public static RoomUserStatusComposer: number = 3153;
+	public static RoomPaneComposer: number = 3378;
+	public static RoomThicknessComposer: number = 3786;
+	public static RoomUnitIdleComposer: number = 3852;
 }
