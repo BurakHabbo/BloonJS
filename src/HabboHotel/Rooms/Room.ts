@@ -174,41 +174,44 @@ export default class Room extends Runnable {
 		let foundRightHolder: boolean = false;
 
 		if(this.loaded){
-			if(this.currentHabbos.length > 0){
-				this.idleCycles = 0;
-			}
-
-			let updatedUnit: Array<RoomUnit> = new Array<RoomUnit>();
-			let toKick: Array<Habbo> = new Array<Habbo>();
-
 			let keys = Object.keys(this.currentHabbos);
 
-			for(let i = 0; i < keys.length; i++){
-				let habbo: Habbo = this.currentHabbos[keys[i]];
+			if(keys.length > 0){
+				this.idleCycles = 0;
+				let updatedUnit: Array<RoomUnit> = new Array<RoomUnit>();
+				let toKick: Array<Habbo> = new Array<Habbo>();
 
-				if(!foundRightHolder){
-					foundRightHolder = this.isOwner(habbo);
-				}
+				for(let i = 0; i < keys.length; i++){
+					let habbo: Habbo = this.currentHabbos[keys[i]];
 
-				if(Emulator.getConfig().getBoolean("hotel.rooms.auto.idle")){
-					if(!habbo.getRoomUnit().isIdle()){
-						habbo.getRoomUnit().increaseIdleTimer();
+					if(!foundRightHolder){
+						foundRightHolder = this.isOwner(habbo);
+					}
 
-						if(habbo.getRoomUnit().isIdle()){
-							this.sendComposer(new RoomUnitIdleComposer(habbo.getRoomUnit()).compose());
-						}
-					}else{
-						habbo.getRoomUnit().increaseIdleTimer();
+					if(Emulator.getConfig().getBoolean("hotel.rooms.auto.idle")){
+						if(!habbo.getRoomUnit().isIdle()){
+							habbo.getRoomUnit().increaseIdleTimer();
 
-						if (habbo.getRoomUnit().getIdleTimer() >= Emulator.getConfig().getInt("hotel.roomuser.idle.cycles.kick", 480)){
-							toKick.push(habbo);
+							if(habbo.getRoomUnit().isIdle()){
+								this.sendComposer(new RoomUnitIdleComposer(habbo.getRoomUnit()).compose());
+							}
+						}else{
+							habbo.getRoomUnit().increaseIdleTimer();
+
+							if (habbo.getRoomUnit().getIdleTimer() >= Emulator.getConfig().getInt("hotel.roomuser.idle.cycles.kick", 480)){
+								toKick.push(habbo);
+							}
 						}
 					}
-				}
 
-				if(habbo.getRoomUnit().containsStatus("sign")){
-					this.sendComposer(new RoomUserStatusComposer(habbo.getRoomUnit()).compose());
-					habbo.getRoomUnit().removeStatus("sign");
+					if(habbo.getRoomUnit().containsStatus("sign")){
+						this.sendComposer(new RoomUserStatusComposer(habbo.getRoomUnit()).compose());
+						habbo.getRoomUnit().removeStatus("sign");
+					}
+				}
+			}else{
+				if(++this.idleCycles >= 60){
+					//this.dispose();
 				}
 			}
 		}
