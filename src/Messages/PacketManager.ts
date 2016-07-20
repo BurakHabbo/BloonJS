@@ -1,5 +1,6 @@
 import MessageHandler from './Incoming/MessageHandler';
 import Incoming from './Incoming/Incoming';
+import Outgoing from './Outgoing/Outgoing';
 import ReleaseVersionMessageEvent from './Incoming/Handshake/ReleaseVersionMessageEvent';
 import InitCryptoMessageEvent from './Incoming/Handshake/InitCryptoMessageEvent';
 import GenerateSecretKeyMessageEvent from './Incoming/Handshake/GenerateSecretKeyMessageEvent';
@@ -24,14 +25,30 @@ import Logging from '../Core/Logging';
 
 export default class PacketManager {
 	private incoming: Array<any>;
+	private outgoingNames: Array<string>;
 
 	public constructor() {
-		this.incoming = [];
+		this.incoming = new Array<any>();
+
+		this.outgoingNames = new Array<string>();
+		let keys: Array<string> = Object.keys(Outgoing);
+
+		for(let i = 0; i < keys.length; i++){
+			let key: string = keys[i];
+			let value: number = Outgoing[key];
+			this.outgoingNames[value] = key;
+		}
+		
+
 		this.registerHandshake();
 		this.registerHotelView();
 		this.registerFriends();
 		this.registerUsers();
 		this.registerRooms();
+	}
+
+	public getOutgoingName(header: number): string {
+		return this.outgoingNames[header] ? this.outgoingNames[header] : "NotFoundComposer";
 	}
 
 	public handlePacket(client: GameClient, packet: ClientMessage): void {
@@ -40,10 +57,11 @@ export default class PacketManager {
 
 		try{
 			if(this.isRegistered(packet.getHeader())){
-				//if(Emulator.getConfig().getBoolean('debug.show.packets'))
-					Emulator.getLogging().logPacketLine("[" + Logging.ANSI_CYAN + "CLIENT" + Logging.ANSI_RESET + "][" + packet.getHeader() +"] => " + packet.getMessageBody());
-
 				let handler = new this.incoming[packet.getHeader()]();
+
+				//if(Emulator.getConfig().getBoolean('debug.show.packets'))
+					Emulator.getLogging().logPacketLine("[" + Logging.ANSI_CYAN + "CLIENT" + Logging.ANSI_RESET + "][" + handler.constructor.name +"] => " + packet.getMessageBody());
+
 
 				handler.client = client;
 				handler.packet = packet;

@@ -4,7 +4,7 @@ export default class GameClientManager {
 	private clients: Array<GameClient>;
 
 	public constructor(){
-		this.clients = [];
+		this.clients = new Array<GameClient>();
 	}
 
 	public getSessions(): Array<GameClient> {
