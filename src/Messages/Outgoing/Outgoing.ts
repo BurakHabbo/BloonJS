@@ -35,4 +35,6 @@ export default class Outgoing {
 	public static RoomPaneComposer: number = 3378;
 	public static RoomThicknessComposer: number = 3786;
 	public static RoomUnitIdleComposer: number = 3852;
+	public static PongComposer: number = 3014;
+	public static UserCreditsComposer: number = 3604;
 }

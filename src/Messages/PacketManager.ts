@@ -6,11 +6,13 @@ import GenerateSecretKeyMessageEvent from './Incoming/Handshake/GenerateSecretKe
 import ClientFlashVarsMessageEvent from './Incoming/Handshake/ClientFlashVarsMessageEvent';
 import UniqueIDMessageEvent from './Incoming/Handshake/UniqueIDMessageEvent';
 import SSOTicketMessageEvent from './Incoming/Handshake/SSOTicketMessageEvent';
+import PingEvent from './Incoming/Handshake/PingEvent';
 import HotelViewRequestBonusRareEvent from './Incoming/HotelView/HotelViewRequestBonusRareEvent';
 import RequestNewsListEvent from './Incoming/HotelView/RequestNewsListEvent';
 import HotelViewDataEvent from './Incoming/HotelView/HotelViewDataEvent';
 import RequestFriendRequestsEvent from './Incoming/Friends/RequestFriendRequestsEvent';
 import RequestUserDataEvent from './Incoming/Users/RequestUserDataEvent';
+import RequestUserCreditsEvent from './Incoming/Users/RequestUserCreditsEvent';
 import RequestRoomDataEvent from './Incoming/Rooms/RequestRoomDataEvent';
 import RequestRoomLoadEvent from './Incoming/Rooms/RequestRoomLoadEvent';
 import RequestRoomHeightmapEvent from './Incoming/Rooms/RequestRoomHeightmapEvent';
@@ -70,6 +72,7 @@ export default class PacketManager {
 		this.registerHandler(Incoming.ClientFlashVarsMessageEvent, ClientFlashVarsMessageEvent);
 		this.registerHandler(Incoming.UniqueIDMessageEvent, UniqueIDMessageEvent);
 		this.registerHandler(Incoming.SSOTicketMessageEvent, SSOTicketMessageEvent);
+		this.registerHandler(Incoming.PingEvent, PingEvent);
 	}
 
 	public registerHotelView(): void {
@@ -84,6 +87,7 @@ export default class PacketManager {
 
 	public registerUsers(): void {
 		this.registerHandler(Incoming.RequestUserDataEvent, RequestUserDataEvent);
+		this.registerHandler(Incoming.RequestUserCreditsEvent, RequestUserCreditsEvent);
 	}
 
 	public registerRooms(): void {
