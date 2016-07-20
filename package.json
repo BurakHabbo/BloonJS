@@ -3,6 +3,7 @@
   "author": "Burak (burak@burak.fr)",
   "dependencies": {
     "ini": "^1.3.4",
-    "mysql": "^2.11.1"
+    "mysql": "^2.11.1",
+    "typescript-collections": "^1.1.2"
   }
 }

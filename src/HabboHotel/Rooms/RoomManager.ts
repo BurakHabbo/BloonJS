@@ -49,6 +49,31 @@ export default class RoomManager {
 		});
 	}
 
+	public roomCategoriesForHabbo(habbo: Habbo): Array<RoomCategory> {
+		let categories: Array<RoomCategory> = new Array<RoomCategory>();
+
+		let keys = Object.keys(this.roomCategories);
+
+		for(let i = 0; i < keys.length; i++){
+			let category: RoomCategory = this.roomCategories[keys[i]];
+
+			if(category.getMinRank() <= habbo.getHabboInfo().getRank())
+				categories.push(category);
+		}
+
+		categories.sort(function(a: RoomCategory, b: RoomCategory){
+			if(a.getId() > b.getId()){
+				return 1;
+			}else if(a.getId() < b.getId()){
+				return -1;
+			}else{
+				return 0;
+			}
+		});
+
+		return categories;
+	}
+
 	public loadRoomModels(): void {
 		this.roomLayouts = new Array<RoomLayout>();
 

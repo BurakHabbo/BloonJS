@@ -14,10 +14,15 @@ import HotelViewDataEvent from './Incoming/HotelView/HotelViewDataEvent';
 import RequestFriendRequestsEvent from './Incoming/Friends/RequestFriendRequestsEvent';
 import RequestUserDataEvent from './Incoming/Users/RequestUserDataEvent';
 import RequestUserCreditsEvent from './Incoming/Users/RequestUserCreditsEvent';
+import RequestUserClubEvent from './Incoming/Users/RequestUserClubEvent';
 import RequestRoomDataEvent from './Incoming/Rooms/RequestRoomDataEvent';
 import RequestRoomLoadEvent from './Incoming/Rooms/RequestRoomLoadEvent';
 import RequestRoomHeightmapEvent from './Incoming/Rooms/RequestRoomHeightmapEvent';
 import RoomUserSignEvent from './Incoming/Rooms/Users/RoomUserSignEvent';
+import RoomUserWalkEvent from './Incoming/Rooms/Users/RoomUserWalkEvent';
+import RequestNewNavigatorDataEvent from './Incoming/Navigator/RequestNewNavigatorDataEvent';
+import RequestRoomCategoriesEvent from './Incoming/Navigator/RequestRoomCategoriesEvent';
+import RequestNewNavigatorRoomsEvent from './Incoming/Navigator/RequestNewNavigatorRoomsEvent';
 import GameClient from '../HabboHotel/GameClients/GameClient';
 import ClientMessage from './ClientMessage';
 import Emulator from '../Emulator';
@@ -45,6 +50,7 @@ export default class PacketManager {
 		this.registerFriends();
 		this.registerUsers();
 		this.registerRooms();
+		this.registerNavigator();
 	}
 
 	public getOutgoingName(header: number): string {
@@ -106,6 +112,7 @@ export default class PacketManager {
 	public registerUsers(): void {
 		this.registerHandler(Incoming.RequestUserDataEvent, RequestUserDataEvent);
 		this.registerHandler(Incoming.RequestUserCreditsEvent, RequestUserCreditsEvent);
+		this.registerHandler(Incoming.RequestUserClubEvent, RequestUserClubEvent);
 	}
 
 	public registerRooms(): void {
@@ -113,5 +120,12 @@ export default class PacketManager {
 		this.registerHandler(Incoming.RequestRoomLoadEvent, RequestRoomLoadEvent);
 		this.registerHandler(Incoming.RequestRoomHeightmapEvent, RequestRoomHeightmapEvent);
 		this.registerHandler(Incoming.RoomUserSignEvent, RoomUserSignEvent);
+		this.registerHandler(Incoming.RoomUserWalkEvent, RoomUserWalkEvent);
+	}
+
+	public registerNavigator(): void {
+		this.registerHandler(Incoming.RequestNewNavigatorDataEvent, RequestNewNavigatorDataEvent);
+		this.registerHandler(Incoming.RequestRoomCategoriesEvent, RequestRoomCategoriesEvent);
+		this.registerHandler(Incoming.RequestNewNavigatorRoomsEvent, RequestNewNavigatorRoomsEvent);
 	}
 }

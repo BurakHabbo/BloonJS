@@ -15,10 +15,16 @@ export default class Incoming {
 
 	public static RequestUserDataEvent: number = 186;
 	public static RequestUserCreditsEvent: number = 3697;
+	public static RequestUserClubEvent: number = 12;
 
 	public static RequestRoomDataEvent: number = 1164;
 	public static RequestRoomLoadEvent: number = 407;
 	public static RequestRoomHeightmapEvent: number = 2125;
 
 	public static RoomUserSignEvent: number = 2966;
+	public static RoomUserWalkEvent: number = 1737;
+
+	public static RequestNewNavigatorDataEvent: number = 882;
+	public static RequestRoomCategoriesEvent: number = 2506;
+	public static RequestNewNavigatorRoomsEvent: number = 2722;
 }

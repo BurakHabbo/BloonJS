@@ -14,4 +14,28 @@ export default class RoomCategory {
 		this.maxUserCount = <number>row.max_user_count;
 		this.official = row.public == 1;
 	}
+
+	public getId(): number {
+		return this.id;
+	}
+
+	public getMinRank(): number {
+		return this.minRank;
+	}
+
+	public getCaption(): string {
+		return this.caption;
+	}
+
+	public isCanTrade(): boolean {
+		return this.canTrade;
+	}
+
+	public getMaxUserCount(): number {
+		return this.maxUserCount;
+	}
+
+	public isPublic(): boolean {
+		return this.official;
+	}
 }

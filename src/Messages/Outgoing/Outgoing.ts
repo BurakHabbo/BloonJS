@@ -37,4 +37,10 @@ export default class Outgoing {
 	public static RoomUnitIdleComposer: number = 3852;
 	public static PongComposer: number = 3014;
 	public static UserCreditsComposer: number = 3604;
+	public static NewNavigatorMetaDataComposer: number = 371;
+	public static NewNavigatorLiftedRoomsComposer: number = 761;
+	public static NewNavigatorCollapsedCategoriesComposer: number = 1263;
+	public static NewNavigatorSavedSearchesComposer: number = 508;
+	public static NewNavigatorEventCategoriesComposer: number = 1109;
+	public static RoomCategoriesComposer: number = 377;
 }

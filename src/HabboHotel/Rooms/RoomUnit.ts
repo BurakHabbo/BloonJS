@@ -18,7 +18,7 @@ export default class RoomUnit {
 	private goalY: number;
 
 	private inRoom: boolean;
-	private canWalk: boolean;
+	private canIWalk: boolean;
 	private fastWalk: boolean = false;
 	private animateWalk: boolean = false;
 	private cmdTeleport: boolean = false;
@@ -53,7 +53,7 @@ export default class RoomUnit {
 		this.y = 0;
 		this.z = 0.0;
 		this.inRoom = false;
-		this.canWalk = true;
+		this.canIWalk = true;
 		this.status = new Array<string>();
 		this.cacheable = new Array<Object>();
 		this.roomUnitType = RoomUnitType.UNKNOWN;
@@ -100,6 +100,15 @@ export default class RoomUnit {
 
 	public isTeleporting(): boolean {
 		return this.isCurrentlyTeleporting;
+	}
+
+	public isCmdTeleport(): boolean {
+		return this.cmdTeleport;
+	}
+
+	public stopWalking(): void {
+		this.removeStatus("mv");
+		this.setGoalLocation(this.x, this.y);
 	}
 
 	public setGoalLocation(x: number, y: number): void {
@@ -176,6 +185,14 @@ export default class RoomUnit {
 		this.status[status] = value;
 	}
 
+	public getCacheable(key: string): Object {
+		return this.cacheable[key] ? this.cacheable[key] : null;
+	}
+
+	public removeCacheable(key: string): void {
+		delete this.cacheable[key];
+	}
+
 	public getIdleTimer(): number {
 		return this.idleTimer;
 	}
@@ -186,5 +203,13 @@ export default class RoomUnit {
 
 	public increaseIdleTimer(): void {
 		this.idleTimer++;
+	}
+
+	public isInRoom(): boolean {
+		return this.inRoom;
+	}
+
+	public canWalk(): boolean {
+		return this.canIWalk;
 	}
 }
