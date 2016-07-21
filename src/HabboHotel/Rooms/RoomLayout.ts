@@ -79,6 +79,13 @@ export default class RoomLayout {
 		}
 	}
 
+	public getHeightAtSquare(x: number, y: number): number {
+		if(x < 0 || y < 0 || x >= this.getMapSizeX() || y >= this.getMapSizeY())
+			return 0;
+
+		return this.squareHeights[x][y];
+	}
+
 	public getName(): string {
 		return this.name;
 	}

@@ -3,7 +3,11 @@ import DanceType from '../Users/DanceType';
 import RoomUnitType from './RoomUnitType';
 import Room from './Room';
 import PathFinder from '../../Util/Pathfinding/PathFinder';
+import Node from '../../Util/Pathfinding/Node';
 import Emulator from '../../Emulator';
+import Habbo from '../Users/Habbo';
+import Rotation from '../../Util/Pathfinding/Rotation';
+import RoomUserStatusComposer from '../../Messages/Outgoing/Rooms/Users/RoomUserStatusComposer';
 
 export default class RoomUnit {
 	private id: number;
@@ -91,7 +95,7 @@ export default class RoomUnit {
 	}
 
 	public setPathFinderRoom(room: Room): void {
-		//this.pathFinder.setRoom(room);
+		this.pathFinder.setRoom(room);
 	}
 
 	public resetIdleTimer(): void {
@@ -117,8 +121,16 @@ export default class RoomUnit {
 		this.tilesWalked = 0;
 		this.goalX = x;
 		this.goalY = y;
-		//this.pathFinder.findPath();
+		this.pathFinder.findPath();
 		this.cmdSit = false;
+	}
+
+	public isAtGoal(): boolean {
+		return this.goalX == this.x && this.goalY == this.y;
+	}
+
+	public isWalking(): boolean {
+		return (this.goalX != this.x || this.goalY != this.y) && this.canIWalk;
 	}
 
 	public setX(x: number): void {
@@ -159,6 +171,14 @@ export default class RoomUnit {
 
 	public getZ(): number {
 		return this.z;
+	}
+
+	public getGoalX(): number {
+		return this.goalX;
+	}
+
+	public getGoalY(): number {
+		return this.goalY;
 	}
 
 	public getBodyRotation(): RoomUserRotation {
@@ -211,5 +231,74 @@ export default class RoomUnit {
 
 	public canWalk(): boolean {
 		return this.canIWalk;
+	}
+
+	public getPathFinder(): PathFinder {
+		return this.pathFinder;
+	}
+
+	public setRotation(rotation: RoomUserRotation): void {
+		this.bodyRotation = rotation;
+		this.headRotation = rotation;
+	}
+
+	public cycle(room: Room): boolean {
+		if(!this.isWalking())
+			return false;
+
+		if(this.containsStatus("mv")){
+			this.removeStatus("mv");
+		}
+		if(this.containsStatus("lay")){
+			this.removeStatus("lay");
+		}
+		if(this.containsStatus("sit")){
+			this.removeStatus("sit");
+		}
+
+		if(this.pathFinder == null)
+			return true;
+
+		if(this.fastWalk && this.getPathFinder().getPath().size() >= 3){
+			this.getPathFinder().getPath().dequeue();
+			this.getPathFinder().getPath().dequeue();
+		}
+
+		let next: Node = this.getPathFinder().getPath().dequeue();
+
+		if(next == null)
+			return true;
+
+		let habbo: Habbo = room.getHabbo(this);
+
+		if(this.containsStatus("ded")){
+			this.removeStatus("ded");
+		}
+
+		if(habbo != null){
+			if(this.isIdle()){
+				room.unIdle(habbo);
+				this.idleTimer = 0;
+			}
+		}
+
+		let zHeight: number = 0.0;
+
+		this.tilesWalked++;
+
+		let oldRotation: RoomUserRotation = this.getBodyRotation();
+		this.setRotation(Rotation.calculate(this.getX(), this.getY(), next.getX(), next.getY()));
+
+		zHeight += room.getLayout().getHeightAtSquare(next.getX(), next.getY());
+
+		this.addStatus("mv", next.getX() + "," + next.getY() + "," + zHeight.toFixed(1));
+		room.sendComposer(new RoomUserStatusComposer(this).compose());
+
+		this.setZ(zHeight);
+		this.setX(next.getX());
+		this.setY(next.getY());
+		this.resetIdleTimer();
+
+		return false;
 	}
 }

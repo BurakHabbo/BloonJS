@@ -2,6 +2,8 @@ import * as Collections from 'typescript-collections';
 import Node from './Node';
 import Room from '../../HabboHotel/Rooms/Room';
 import RoomUnit from '../../HabboHotel/Rooms/RoomUnit';
+import GameMap from './GameMap';
+
 export default class PathFinder {
 	private room: Room;
 	private roomUnit: RoomUnit;
@@ -23,9 +25,26 @@ export default class PathFinder {
 
 	public calculatePath(): Collections.Queue<Node> {
 		if(this.room != null && this.roomUnit != null){
+			let gameMap : GameMap<Node> = this.room.getGameMap();
 
+			if(gameMap != null){
+				let nodeQueue = gameMap.findPath(this.roomUnit.getX(), this.roomUnit.getX(), this.roomUnit.getGoalX(), this.roomUnit.getGoalY(), this.room);
+
+				if(nodeQueue.size() > 0){
+					console.log("size : "+nodeQueue.size());
+					return nodeQueue;
+				}
+			}
 		}
 		
 		return new Collections.Queue<Node>();
+	}
+
+	public setRoom(room: Room): void {
+		this.room = room;
+	}
+
+	public getPath(): Collections.Queue<Node> {
+		return this.path;
 	}
 }

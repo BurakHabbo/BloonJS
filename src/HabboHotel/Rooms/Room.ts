@@ -10,6 +10,8 @@ import RoomRightLevels from './RoomRightLevels';
 import ServerMessage from '../../Messages/ServerMessage';
 import Runnable from '../../Threading/Runnable';
 import RoomUnit from './RoomUnit';
+import GameMap from '../../Util/Pathfinding/GameMap';
+import Node from '../../Util/Pathfinding/Node';
 
 export default class Room extends Runnable {
 	private id: number;
@@ -82,7 +84,7 @@ export default class Room extends Runnable {
 	private lastTimerReset = Emulator.getIntUnixTimestamp();
 	private muted: boolean;
 
-	private gameMap: any;
+	private gameMap: GameMap<Node>;
 
 	//private roomSpecialTypes: RoomSpecialTypes;
 
@@ -208,6 +210,12 @@ export default class Room extends Runnable {
 						this.sendComposer(new RoomUserStatusComposer(habbo.getRoomUnit()).compose());
 						habbo.getRoomUnit().removeStatus("sign");
 					}
+
+					if(habbo.getRoomUnit().isWalking() && habbo.getRoomUnit().getPathFinder().getPath() != null && !habbo.getRoomUnit().getPathFinder().getPath().isEmpty()){
+						if(!habbo.getRoomUnit().cycle(this)){
+							continue;
+						}
+					}
 				}
 			}else{
 				if(++this.idleCycles >= 60){
@@ -218,9 +226,20 @@ export default class Room extends Runnable {
 	}
 
 	public loadData(): void {
+		this.loadHeightmap();
 		this.unitCounter = 0;
 		this.loaded = true;
 		Emulator.getThreading().schedule(this, 500);
+	}
+
+	public loadHeightmap(): void {
+		this.gameMap = new GameMap<Node>(this.layout.getMapSizeX(), this.layout.getMapSizeY());
+		let nodes: Array<Node> = this.gameMap.getNodes();
+
+		for(let i = 0; i < nodes.length; i++){
+			let node: Node = nodes[i];
+			this.gameMap.setWalkable(node.getX(), node.getY(), true);//tileWalkable(node.getX(), node.getY())
+		}
 	}
 
 	public unIdle(habbo: Habbo): void {
@@ -387,6 +406,28 @@ export default class Room extends Runnable {
 		this.unitCounter++;
 	}
 
+	public getHabbo(search: number | string | RoomUnit): Habbo {
+		if(search instanceof RoomUnit){
+			let keys = Object.keys(this.currentHabbos);
+
+			for(let i = 0; i < keys.length; i++){
+				if(this.currentHabbos[keys[i]].getRoomUnit() == search)
+					return this.currentHabbos[keys[i]];
+			}
+		}else if(typeof search == "string"){
+			let keys = Object.keys(this.currentHabbos);
+
+			for(let i = 0; i < keys.length; i++){
+				if(this.currentHabbos[keys[i]].getHabboInfo().getUsername() == search)
+					return this.currentHabbos[keys[i]];
+			}
+		}else if(typeof search == "number"){
+			return this.currentHabbos[search] ? this.currentHabbos[search] : null;
+		}
+
+		return null;
+	}
+
 	public getUnitCounter(): number {
 		return this.unitCounter;
 	}
@@ -401,5 +442,9 @@ export default class Room extends Runnable {
 		for(let i = 0; i < keys.length; i++){
 			this.currentHabbos[keys[i]].getClient().sendResponse(message);
 		}
+	}
+
+	public getGameMap(): GameMap<Node> {
+		return this.gameMap;
 	}
 }
