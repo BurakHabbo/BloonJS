@@ -8,6 +8,7 @@ import Emulator from '../../Emulator';
 import Habbo from '../Users/Habbo';
 import Rotation from '../../Util/Pathfinding/Rotation';
 import RoomUserStatusComposer from '../../Messages/Outgoing/Rooms/Users/RoomUserStatusComposer';
+import Pathfinding = require('pathfinding');
 
 export default class RoomUnit {
 	private id: number;
@@ -259,15 +260,18 @@ export default class RoomUnit {
 		if(this.pathFinder == null)
 			return true;
 
-		if(this.fastWalk && this.getPathFinder().getPath().size() >= 3){
-			this.getPathFinder().getPath().dequeue();
-			this.getPathFinder().getPath().dequeue();
+		if(this.fastWalk && this.getPathFinder().getPath().length >= 3){
+			this.getPathFinder().getPath().shift();
+			this.getPathFinder().getPath().shift();
 		}
 
-		let next: Node = this.getPathFinder().getPath().dequeue();
+		let next: Array<number> = this.getPathFinder().getPath().shift();
 
 		if(next == null)
 			return true;
+
+		let nextX: number = next[0];
+		let nextY: number = next[1];
 
 		let habbo: Habbo = room.getHabbo(this);
 
@@ -287,16 +291,17 @@ export default class RoomUnit {
 		this.tilesWalked++;
 
 		let oldRotation: RoomUserRotation = this.getBodyRotation();
-		this.setRotation(Rotation.calculate(this.getX(), this.getY(), next.getX(), next.getY()));
+		this.setRotation(Rotation.calculate(this.getX(), this.getY(), nextX, nextY));
 
-		zHeight += room.getLayout().getHeightAtSquare(next.getX(), next.getY());
+		zHeight += room.getLayout().getHeightAtSquare(nextX, nextY);
 
-		this.addStatus("mv", next.getX() + "," + next.getY() + "," + zHeight.toFixed(1));
+		
+		this.addStatus("mv", nextX + "," + nextY + "," + zHeight.toFixed(1));
 		room.sendComposer(new RoomUserStatusComposer(this).compose());
 
 		this.setZ(zHeight);
-		this.setX(next.getX());
-		this.setY(next.getY());
+		this.setX(nextX);
+		this.setY(nextY);
 		this.resetIdleTimer();
 
 		return false;

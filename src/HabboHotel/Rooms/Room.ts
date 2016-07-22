@@ -211,7 +211,12 @@ export default class Room extends Runnable {
 						habbo.getRoomUnit().removeStatus("sign");
 					}
 
-					if(habbo.getRoomUnit().isWalking() && habbo.getRoomUnit().getPathFinder().getPath() != null && !habbo.getRoomUnit().getPathFinder().getPath().isEmpty()){
+					if(habbo.getRoomUnit().isAtGoal() && habbo.getRoomUnit().containsStatus("mv")){
+						habbo.getRoomUnit().removeStatus("mv");
+						this.sendComposer(new RoomUserStatusComposer(habbo.getRoomUnit()).compose());
+					}
+
+					if(habbo.getRoomUnit().isWalking() && habbo.getRoomUnit().getPathFinder().getPath() != null && !(habbo.getRoomUnit().getPathFinder().getPath().length == 0)){
 						if(!habbo.getRoomUnit().cycle(this)){
 							continue;
 						}
@@ -234,12 +239,12 @@ export default class Room extends Runnable {
 
 	public loadHeightmap(): void {
 		this.gameMap = new GameMap<Node>(this.layout.getMapSizeX(), this.layout.getMapSizeY());
-		let nodes: Array<Node> = this.gameMap.getNodes();
+		/*let nodes: Array<Node> = this.gameMap.getNodes();
 
 		for(let i = 0; i < nodes.length; i++){
 			let node: Node = nodes[i];
 			this.gameMap.setWalkable(node.getX(), node.getY(), true);//tileWalkable(node.getX(), node.getY())
-		}
+		}*/
 	}
 
 	public unIdle(habbo: Habbo): void {

@@ -2,6 +2,7 @@
 /// <reference path="refs/ini.d.ts" />
 /// <reference path="refs/mysql.d.ts" />
 /// <reference path="refs/jsbn.d.ts" />
+/// <reference path="refs/pathfinding.d.ts" />
 //process.env.UV_THREADPOOL_SIZE=64;
 import Logging from './Core/Logging';
 import Random from './Util/Random';
