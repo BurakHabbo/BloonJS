@@ -1,6 +1,7 @@
 import Emulator from '../../Emulator';
 import Habbo from './Habbo';
 import GameClient from '../GameClients/GameClient';
+import GenericAlertComposer from '../../Messages/Outgoing/Generic/Alerts/GenericAlertComposer';
 
 export default class HabboManager {
 	private onlineHabbos: Array<Habbo>;
@@ -39,7 +40,7 @@ export default class HabboManager {
 					let h: Habbo = Emulator.getGameEnvironment().getHabboManager().getHabbo(<number>row.id);
 
 					if(h != null){
-						//h.getClient().sendResponse(new GenericAlertComposer("You logged in from somewhere else."));
+						h.getClient().sendResponse(new GenericAlertComposer("You logged in from somewhere else."));
 						setTimeout(function(){
 							h.getClient().destroy();
 							h = null;

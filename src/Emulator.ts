@@ -260,6 +260,14 @@ export default class Emulator {
 		return s.match("[^a-zA-Z0-9]") == null ? true : false;
 	}
 
+	public static getUserCount(): number {
+		return Emulator.getGameEnvironment().getHabboManager().getOnlineCount();
+	}
+
+	public static getRoomCount(): number {
+		return 0;
+	}
+
 	public static logo: string =
 		" _______   __                                   _____   ______   __ \n" +
 		"/       \\ /  |                                 /     | /      \\ /  |\n" +
