@@ -72,7 +72,10 @@ export default class PacketManager {
 				handler.client = client;
 				handler.packet = packet;
 
-				handler.handle();
+				//TODO: Packet Security
+				//if(!handler.requireLogged && client.getHabbo() == null){
+					handler.handle();
+				//}
 			}else{
 				Emulator.getLogging().logPacketLine("[" + Logging.ANSI_CYAN + "CLIENT" + Logging.ANSI_RESET + "]["+ Logging.ANSI_RED +"UNDEFINED" + Logging.ANSI_RESET + "][" + packet.getHeader() +"] => " + packet.getMessageBody());
 			}
