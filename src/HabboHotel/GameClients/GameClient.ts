@@ -23,11 +23,11 @@ export default class GameClient extends net.Socket {
 	public sendResponse(response: MessageComposer | ServerMessage): void {
 		if(response instanceof MessageComposer){
 			let packet: ServerMessage = response.compose();
-			//if(Emulator.getConfig().getBoolean('debug.show.packets'))
+			if(Emulator.debugging)
 				Emulator.getLogging().logPacketLine("[" + Logging.ANSI_PURPLE + "SERVER" + Logging.ANSI_RESET + "][" + Emulator.getGameServer().getPacketManager().getOutgoingName(packet.getHeader()) +"] => " + packet.getMessageBody());
 			this.write(this.isRC4initialized() ? this.getRC4server().parse(packet.get()) : packet.get());
 		}else if(response instanceof ServerMessage){
-			//if(Emulator.getConfig().getBoolean('debug.show.packets'))
+			if(Emulator.debugging)
 				Emulator.getLogging().logPacketLine("[" + Logging.ANSI_PURPLE + "SERVER" + Logging.ANSI_RESET + "][" + Emulator.getGameServer().getPacketManager().getOutgoingName(response.getHeader()) +"] => " + response.getMessageBody());
 			this.write(this.isRC4initialized() ? this.getRC4server().parse(response.get()) : response.get());
 		}

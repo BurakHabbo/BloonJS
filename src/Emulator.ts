@@ -38,6 +38,7 @@ export default class Emulator {
 	/**
 	 * SWF infos to secure packets.
 	 */
+	//public static swfBuild: string = "PRODUCTION-201609131202-736758364";//Work in progress
 	public static swfBuild: string = "PRODUCTION-201601012205-226667486";
 	public static flashBase: string = "http://127.0.0.1/resources/swf/gordon/PRODUCTION-201601012205-226667486/";
 	public static externalVars: string = "http://127.0.0.1/resources/swf/gamedata/external_variables.txt";
