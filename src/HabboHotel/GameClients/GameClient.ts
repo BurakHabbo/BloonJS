@@ -39,6 +39,11 @@ export default class GameClient extends net.Socket {
 		}
 	}
 
+	public permBan(): void {
+		//TODO: Ban IP
+		this.destroy();
+	}
+
 	public initDH(): void {
 		this.diffieHellman = new DiffieHellman();
 		this.diffieHellman.generateDH();

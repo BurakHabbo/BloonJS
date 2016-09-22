@@ -4,14 +4,28 @@ import UniqueMachineIDMessageComposer from '../../Outgoing/Handshake/UniqueMachi
 
 export default class UniqueIDMessageEvent extends MessageHandler {
 	public handle(): void {
-		this.packet.readString();
-		this.client.setMachineId(this.packet.readString());
-		this.client.setMachinePlatform(this.packet.readString());
+		if(this.client.getHabbo() || this.client.getMachineId() || !this.client.isRC4initialized()){
+			return this.client.permBan();
+		}
 
-		if(this.client.getMachineId().length == 33 && this.client.getMachineId().substring(1).match("[a-fA-F0-9]{32}") != null){
-			this.client.sendResponse(new UniqueMachineIDMessageComposer(this.client.getMachineId()));
+		let machineId1: string = this.packet.readString();
+		let machineId2: string = this.packet.readString();
+		let machinePlatform: string = this.packet.readString();
+
+		if(!machineId1 || !machineId2 || !machinePlatform){
+			return this.client.permBan();
+		}
+
+		if(machineId1 != machineId2){
+			return this.client.permBan();
+		}
+
+		if(machineId1.length == 33 && machineId1.substring(1).match("[a-fA-F0-9]{32}") != null){
+			this.client.setMachineId(machineId1);
+			this.client.setMachinePlatform(machinePlatform);
+			this.client.sendResponse(new UniqueMachineIDMessageComposer(machineId1));
 		}else{
-			this.client.destroy();
+			return this.client.permBan();
 		}
 	}
 }

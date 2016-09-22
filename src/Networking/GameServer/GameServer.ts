@@ -50,6 +50,7 @@ export default class GameServer {
 		c.setMachineId = x.setMachineId;
 		c.setHabbo = x.setHabbo;
 		c.getHabbo = x.getHabbo;
+		c.permBan = x.permBan;
 
 		c.on('data', function(buffer: Buffer){
 

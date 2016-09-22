@@ -25,8 +25,8 @@ export default class Logging {
     }
 
     public logPacketLine(line: Object): void {
-        //if (Emulator.getConfig().getBoolean('debug.show.packets')) {
+        if(Emulator.debugging){
             console.log("[" + Logging.ANSI_BLUE + "PACKET" + Logging.ANSI_RESET + "]" + line.toString());
-        //}
+        }
     }
 }

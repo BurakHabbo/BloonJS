@@ -36,6 +36,13 @@ export default class Emulator {
 	public static version: string = "Version: " + Emulator.MAJOR + "." + Emulator.MINOR + "." + Emulator.BUILD;
 
 	/**
+	 * SWF infos to secure packets.
+	 */
+	public static swfBuild: string = "PRODUCTION-201601012205-226667486";
+	public static flashBase: string = "http://127.0.0.1/resources/swf/gordon/PRODUCTION-201601012205-226667486/";
+	public static externalVars: string = "http://127.0.0.1/resources/swf/gamedata/external_variables.txt";
+
+	/**
 	 * The emulator is fully loaded and ready to handle players.
 	 */
 	public static isReady: boolean = false;
@@ -99,7 +106,7 @@ export default class Emulator {
 			Emulator.getLogging().logStart("You're running: " + Emulator.version);
 			Emulator.getLogging().logStart("System launched in: " + (Emulator.getCurrentTimeMillis() - startTime)+ "ms!");
 
-			Emulator.debugging = Emulator.getConfig().getBoolean("debug.mode");
+			Emulator.debugging = true;//Emulator.getConfig().getBoolean("debug.mode");
 
 			if (Emulator.debugging) {
 				//Emulator.getLogging().logDebugLine("Debugging Enabled!");

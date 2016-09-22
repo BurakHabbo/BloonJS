@@ -21,9 +21,12 @@ export default class SSOTicketMessageEvent extends MessageHandler {
 	public handle(): void {
 		let sso: string = this.packet.readString();
 
+		if(this.packet.readInt() == -1){
+			return this.client.permBan();
+		}
+
 		if(sso.trim().length < 4 || !this.client.isRC4initialized() || this.client.getMachineId() == null){
-			this.client.destroy();
-			return;
+			return this.client.permBan();
 		}
 
 		Emulator.getGameEnvironment().getHabboManager().loadHabbo(sso, this.client, function(client: GameClient, habbo: Habbo){

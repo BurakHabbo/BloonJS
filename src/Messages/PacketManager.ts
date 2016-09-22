@@ -65,19 +65,20 @@ export default class PacketManager {
 			if(this.isRegistered(packet.getHeader())){
 				let handler = new this.incoming[packet.getHeader()]();
 
-				//if(Emulator.getConfig().getBoolean('debug.show.packets'))
+				if(handler.requireLogged && client.getHabbo() == null)
+					return;
+
+				if(Emulator.debugging)
 					Emulator.getLogging().logPacketLine("[" + Logging.ANSI_CYAN + "CLIENT" + Logging.ANSI_RESET + "][" + handler.constructor.name +"] => " + packet.getMessageBody());
 
 
 				handler.client = client;
 				handler.packet = packet;
 
-				//TODO: Packet Security
-				//if(!handler.requireLogged && client.getHabbo() == null){
-					handler.handle();
-				//}
+				handler.handle();
 			}else{
-				Emulator.getLogging().logPacketLine("[" + Logging.ANSI_CYAN + "CLIENT" + Logging.ANSI_RESET + "]["+ Logging.ANSI_RED +"UNDEFINED" + Logging.ANSI_RESET + "][" + packet.getHeader() +"] => " + packet.getMessageBody());
+				if(Emulator.debugging)
+					Emulator.getLogging().logPacketLine("[" + Logging.ANSI_CYAN + "CLIENT" + Logging.ANSI_RESET + "]["+ Logging.ANSI_RED +"UNDEFINED" + Logging.ANSI_RESET + "][" + packet.getHeader() +"] => " + packet.getMessageBody());
 			}
 		}catch(e){
 			console.error(e);

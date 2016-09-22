@@ -34,7 +34,7 @@ export default class ClientMessage {
 		} catch(e) {
 		}
 		
-		return 0;
+		return -1;
 	}
 
 	public readInt(): number {
@@ -45,7 +45,7 @@ export default class ClientMessage {
 			return int;
 		} catch(e) {
 		}
-		return 0;
+		return -1;
 	}
 
 	public readBoolean(): boolean {
@@ -70,6 +70,6 @@ export default class ClientMessage {
 		} catch(e) {
 		}
 
-		return "";
+		return null;
 	}
 }
