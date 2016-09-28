@@ -1,13 +1,13 @@
 import ServerMessage from '../ServerMessage';
 
 abstract class MessageComposer {
-	protected response: ServerMessage;
+    protected response: ServerMessage;
 
-	public constructor() {
-		this.response = new ServerMessage();
-	}
+    public constructor() {
+        this.response = new ServerMessage();
+    }
 
-	public abstract compose(): ServerMessage;
+    public abstract compose(): ServerMessage;
 }
 
 export default MessageComposer;

@@ -1,8 +1,8 @@
 import Emulator from '../Emulator';
 
 export default class Logging {
-	public static ANSI_BRIGHT: string = "\u001B[1m";
-	public static ANSI_ITALICS: string = "\u001B[3m";
+    public static ANSI_BRIGHT: string = "\u001B[1m";
+    public static ANSI_ITALICS: string = "\u001B[3m";
     public static ANSI_UNDERLINE: string = "\u001B[4m";
 
     public static ANSI_RESET: string = "\u001B[0m";
@@ -16,16 +16,16 @@ export default class Logging {
     public static ANSI_WHITE: string = "\u001B[37m";
     public static ANSI_033: string = String.fromCharCode(parseInt("033", 8));
 
-	public logStart(line: Object): void {
-		console.log("[" + Logging.ANSI_BRIGHT + Logging.ANSI_GREEN + "LOADING" + Logging.ANSI_RESET + "] " + line.toString());
-	}
+    public logStart(line: Object): void {
+        console.log("[" + Logging.ANSI_BRIGHT + Logging.ANSI_GREEN + "LOADING" + Logging.ANSI_RESET + "] " + line.toString());
+    }
 
     public logErrorLine(line: Object): void {
         console.log(line.toString().replace("[", "[" + Logging.ANSI_033 + "[1m" + Logging.ANSI_033 + "[31m").replace("]", Logging.ANSI_033 + "[0m]"));
     }
 
     public logPacketLine(line: Object): void {
-        if(Emulator.debugging){
+        if (Emulator.debugging) {
             console.log("[" + Logging.ANSI_BLUE + "PACKET" + Logging.ANSI_RESET + "]" + line.toString());
         }
     }

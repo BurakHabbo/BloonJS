@@ -6,27 +6,27 @@
 ///<reference path='./node.d.ts' />
 
 declare module "mysql" {
-	import stream = require("stream");
+    import stream = require("stream");
 
-	function createConnection(connectionUri: string): IConnection;
-	function createConnection(config: IConnectionConfig): IConnection;
-	function createPool(config: IPoolConfig): IPool;
-	function createPoolCluster(config?: IPoolClusterConfig): IPoolCluster;
-	function escape(value: any): string;
-	function format(sql: string): string;
-	function format(sql: string, values: Array<any>): string;
-	function format(sql: string, values: any): string;
+    function createConnection(connectionUri: string): IConnection;
+    function createConnection(config: IConnectionConfig): IConnection;
+    function createPool(config: IPoolConfig): IPool;
+    function createPoolCluster(config?: IPoolClusterConfig): IPoolCluster;
+    function escape(value: any): string;
+    function format(sql: string): string;
+    function format(sql: string, values: Array<any>): string;
+    function format(sql: string, values: any): string;
 
-	interface IMySql {
-		createConnection(connectionUri: string): IConnection;
-		createConnection(config: IConnectionConfig): IConnection;
-		createPool(config: IPoolConfig): IPool;
-		createPoolCluster(config?: IPoolClusterConfig): IPoolCluster;
-		escape(value: any): string;
-		format(sql: string): string;
-		format(sql: string, values: Array<any>): string;
-		format(sql: string, values: any): string;
-	}
+    interface IMySql {
+        createConnection(connectionUri: string): IConnection;
+        createConnection(config: IConnectionConfig): IConnection;
+        createPool(config: IPoolConfig): IPool;
+        createPoolCluster(config?: IPoolClusterConfig): IPoolCluster;
+        escape(value: any): string;
+        format(sql: string): string;
+        format(sql: string, values: Array<any>): string;
+        format(sql: string, values: any): string;
+    }
 
     interface IConnectionStatic {
         createQuery(sql: string): IQuery;
@@ -433,27 +433,27 @@ declare module "mysql" {
          * A string holding the PEM encoded private key
          */
         key?: string;
-        
+
         /**
          * A string of passphrase for the private key or pfx
          */
         passphrase?: string;
-        
+
         /**
          * A string holding the PEM encoded certificate
          */
         cert?: string;
-        
+
         /**
          * Either a string or list of strings of PEM encoded CA certificates to trust.
          */
         ca?: Array<string>;
-        
+
         /**
          * Either a string or list of strings of PEM encoded CRLs (Certificate Revocation List)
          */
         crl?: Array<string>;
-        
+
         /**
          * A string describing the ciphers to use or exclude
          */

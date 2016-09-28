@@ -1,5 +1,5 @@
 enum RoomUnitType {
-	USER, BOT, PET, UNKNOWN
+    USER, BOT, PET, UNKNOWN
 }
 
 export default RoomUnitType;

@@ -5,27 +5,27 @@ import Habbo from '../../../HabboHotel/Users/Habbo';
 import FriendRequest from '../../../HabboHotel/Messenger/FriendRequest';
 
 export default class LoadFriendRequestsComposer extends MessageComposer {
-	private habbo: Habbo;
+    private habbo: Habbo;
 
-	public constructor(habbo: Habbo){
-		super();
-		this.habbo = habbo;
-	}
-	public compose(): ServerMessage {
-		this.response.init(Outgoing.LoadFriendRequestsComposer);
-		
-		let requests: Array<FriendRequest> = this.habbo.getMessenger().getFriendRequests();
+    public constructor(habbo: Habbo) {
+        super();
+        this.habbo = habbo;
+    }
+    public compose(): ServerMessage {
+        this.response.init(Outgoing.LoadFriendRequestsComposer);
 
-		this.response.appendInt(requests.length);
-		this.response.appendInt(requests.length);
+        let requests: Array<FriendRequest> = this.habbo.getMessenger().getFriendRequests();
 
-		for(let i = 0; i < requests.length; i++){
-			let request: FriendRequest = requests[i];
-			this.response.appendInt(request.getId());
-			this.response.appendString(request.getUsername());
-			this.response.appendString(request.getLook());
-		}
+        this.response.appendInt(requests.length);
+        this.response.appendInt(requests.length);
 
-		return this.response;
-	}
+        for (let i = 0; i < requests.length; i++) {
+            let request: FriendRequest = requests[i];
+            this.response.appendInt(request.getId());
+            this.response.appendString(request.getUsername());
+            this.response.appendString(request.getLook());
+        }
+
+        return this.response;
+    }
 }

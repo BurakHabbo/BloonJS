@@ -1,5 +1,5 @@
 enum RoomTileState {
-	OPEN, BLOCKED
+    OPEN, BLOCKED
 }
 
 export default RoomTileState;

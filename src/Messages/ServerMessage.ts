@@ -1,89 +1,89 @@
 export default class ServerMessage {
-	private header: number;
-	private buffer: Buffer;
+    private header: number;
+    private buffer: Buffer;
 
-	public constructor(header?: number) {
-		if(header){
-			this.header = header;
-			this.buffer = new Buffer(2);
-			this.buffer.writeUInt16BE(header, 0);
-		}
-	}
+    public constructor(header?: number) {
+        if (header) {
+            this.header = header;
+            this.buffer = new Buffer(2);
+            this.buffer.writeUInt16BE(header, 0);
+        }
+    }
 
-	public init(header: number): void {
-		this.header = header;
-		this.buffer = new Buffer(2);
-		this.buffer.writeUInt16BE(header, 0);
-	}
+    public init(header: number): void {
+        this.header = header;
+        this.buffer = new Buffer(2);
+        this.buffer.writeUInt16BE(header, 0);
+    }
 
-	public appendRawBytes(buffer: Buffer): void {
-		this.buffer = Buffer.concat([this.buffer, buffer]);
-	}
+    public appendRawBytes(buffer: Buffer): void {
+        this.buffer = Buffer.concat([this.buffer, buffer]);
+    }
 
-	public appendString(str: string): void {
-		let buffer: Buffer = new Buffer(str.length + 2);
-		buffer.writeUInt16BE(str.length, 0);
-		buffer.write(str, 2);
+    public appendString(str: string): void {
+        let buffer: Buffer = new Buffer(str.length + 2);
+        buffer.writeUInt16BE(str.length, 0);
+        buffer.write(str, 2);
 
-		this.buffer = Buffer.concat([this.buffer, buffer]);
-	}
+        this.buffer = Buffer.concat([this.buffer, buffer]);
+    }
 
-	public appendChar(char: number): void {
-		let buffer: Buffer = new Buffer(String.fromCharCode(char));
+    public appendChar(char: number): void {
+        let buffer: Buffer = new Buffer(String.fromCharCode(char));
 
-		this.buffer = Buffer.concat([this.buffer, buffer]);
-	}
+        this.buffer = Buffer.concat([this.buffer, buffer]);
+    }
 
-	public appendInt(value: number | string | boolean): void {
-		let buffer: Buffer = new Buffer(4);
+    public appendInt(value: number | string | boolean): void {
+        let buffer: Buffer = new Buffer(4);
 
-		if(typeof value == 'number'){
-			buffer.writeInt32BE(<number>value, 0);
-		}else if(typeof value == 'string'){
-			buffer.writeUInt32BE(value.toString().charCodeAt(0), 0);
-		}else if(typeof value == 'boolean'){
-			buffer.writeUInt32BE(value ? 1 : 0, 0);
-		}
-		
-		this.buffer = Buffer.concat([this.buffer, buffer]);
-	}
+        if (typeof value == 'number') {
+            buffer.writeInt32BE(<number>value, 0);
+        } else if (typeof value == 'string') {
+            buffer.writeUInt32BE(value.toString().charCodeAt(0), 0);
+        } else if (typeof value == 'boolean') {
+            buffer.writeUInt32BE(value ? 1 : 0, 0);
+        }
 
-	public appendShort(value: number): void {
-		let buffer: Buffer = new Buffer(2);
-		buffer.writeUInt16BE(value, 0);
+        this.buffer = Buffer.concat([this.buffer, buffer]);
+    }
 
-		this.buffer = Buffer.concat([this.buffer, buffer]);
-	}
+    public appendShort(value: number): void {
+        let buffer: Buffer = new Buffer(2);
+        buffer.writeUInt16BE(value, 0);
 
-	public appendBoolean(value: boolean): void {
-		let buffer: Buffer = new Buffer(1);
-		buffer.write(String.fromCharCode(value ? 1 : 0), 0);
+        this.buffer = Buffer.concat([this.buffer, buffer]);
+    }
 
-		this.buffer = Buffer.concat([this.buffer, buffer]);
-	}
+    public appendBoolean(value: boolean): void {
+        let buffer: Buffer = new Buffer(1);
+        buffer.write(String.fromCharCode(value ? 1 : 0), 0);
 
-	public getMessageBody(): string {
-		let result: string = "";
+        this.buffer = Buffer.concat([this.buffer, buffer]);
+    }
 
-		for(let i = 0; i < this.buffer.length; i++){
-			if(this.buffer[i] < 31){
-				result += "["+this.buffer[i]+"]";
-			}else{
-				result += String.fromCharCode(this.buffer[i]);
-			}
-		}
+    public getMessageBody(): string {
+        let result: string = "";
 
-		return result;
-	}
+        for (let i = 0; i < this.buffer.length; i++) {
+            if (this.buffer[i] < 31) {
+                result += "[" + this.buffer[i] + "]";
+            } else {
+                result += String.fromCharCode(this.buffer[i]);
+            }
+        }
 
-	public getHeader(): number {
-		return this.header;
-	}
+        return result;
+    }
 
-	public get(): Buffer {
-		let buffer: Buffer = new Buffer(4);
-		buffer.writeUInt32BE(this.buffer.length, 0);
+    public getHeader(): number {
+        return this.header;
+    }
 
-		return Buffer.concat([buffer, this.buffer]);
-	}
+    public get(): Buffer {
+        let buffer: Buffer = new Buffer(4);
+        buffer.writeUInt32BE(this.buffer.length, 0);
+
+        return Buffer.concat([buffer, this.buffer]);
+    }
 }

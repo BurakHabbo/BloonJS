@@ -7,11 +7,11 @@ import NewNavigatorSavedSearchesComposer from '../../Outgoing/Navigator/NewNavig
 import NewNavigatorEventCategoriesComposer from '../../Outgoing/Navigator/NewNavigatorEventCategoriesComposer';
 
 export default class RequestNewNavigatorDataEvent extends MessageHandler {
-	public handle(): void {
-		this.client.sendResponse(new NewNavigatorMetaDataComposer());
-		this.client.sendResponse(new NewNavigatorLiftedRoomsComposer());
-		this.client.sendResponse(new NewNavigatorCollapsedCategoriesComposer());
-		this.client.sendResponse(new NewNavigatorSavedSearchesComposer());
-		this.client.sendResponse(new NewNavigatorEventCategoriesComposer());
-	}
+    public handle(): void {
+        this.client.sendResponse(new NewNavigatorMetaDataComposer());
+        this.client.sendResponse(new NewNavigatorLiftedRoomsComposer());
+        this.client.sendResponse(new NewNavigatorCollapsedCategoriesComposer());
+        this.client.sendResponse(new NewNavigatorSavedSearchesComposer());
+        this.client.sendResponse(new NewNavigatorEventCategoriesComposer());
+    }
 }

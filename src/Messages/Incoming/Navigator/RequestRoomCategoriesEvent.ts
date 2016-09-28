@@ -4,8 +4,8 @@ import RoomCategoriesComposer from '../../Outgoing/Navigator/RoomCategoriesCompo
 import NewNavigatorEventCategoriesComposer from '../../Outgoing/Navigator/NewNavigatorEventCategoriesComposer';
 
 export default class RequestRoomCategoriesEvent extends MessageHandler {
-	public handle(): void {
-		this.client.sendResponse(new RoomCategoriesComposer(Emulator.getGameEnvironment().getRoomManager().roomCategoriesForHabbo(this.client.getHabbo())));
-		this.client.sendResponse(new NewNavigatorEventCategoriesComposer());
-	}
+    public handle(): void {
+        this.client.sendResponse(new RoomCategoriesComposer(Emulator.getGameEnvironment().getRoomManager().roomCategoriesForHabbo(this.client.getHabbo())));
+        this.client.sendResponse(new NewNavigatorEventCategoriesComposer());
+    }
 }

@@ -1,5 +1,5 @@
 enum HabboGender {
-	M, F
+    M, F
 }
 
 export default HabboGender;

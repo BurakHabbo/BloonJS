@@ -18,38 +18,38 @@ import FavoriteRoomsCountComposer from '../../Outgoing/Generic/FavoriteRoomsCoun
 import UserEffectsListComposer from '../../Outgoing/Users/UserEffectsListComposer';
 
 export default class SSOTicketMessageEvent extends MessageHandler {
-	public handle(): void {
-		let sso: string = this.packet.readString();
+    public handle(): void {
+        let sso: string = this.packet.readString();
 
-		if(this.packet.readInt() == -1){
-			return this.client.permBan();
-		}
+        if (this.packet.readInt() == -1) {
+            return this.client.permBan();
+        }
 
-		if(sso.trim().length < 4 || !this.client.isRC4initialized() || this.client.getMachineId() == null){
-			return this.client.permBan();
-		}
+        if (sso.trim().length < 4 || !this.client.isRC4initialized() || this.client.getMachineId() == null) {
+            return this.client.permBan();
+        }
 
-		Emulator.getGameEnvironment().getHabboManager().loadHabbo(sso, this.client, function(client: GameClient, habbo: Habbo){
-			habbo.setClient(client);
-			client.setHabbo(habbo);
-			//client.getHabbo().connect();
-			//Emulator.getThreading().run(habbo);
-			Emulator.getGameEnvironment().getHabboManager().addHabbo(habbo);
+        Emulator.getGameEnvironment().getHabboManager().loadHabbo(sso, this.client, function(client: GameClient, habbo: Habbo) {
+            habbo.setClient(client);
+            client.setHabbo(habbo);
+            //client.getHabbo().connect();
+            //Emulator.getThreading().run(habbo);
+            Emulator.getGameEnvironment().getHabboManager().addHabbo(habbo);
 
-			let messages: Array<ServerMessage> = new Array<ServerMessage>();
-			messages.push(new AuthenticationOKMessageComposer().compose());
-			messages.push(new UserHomeRoomComposer(habbo.getHabboInfo().getHomeRoom(), 0).compose());
-			messages.push(new UserPermissionsComposer(habbo).compose());
-			messages.push(new MessengerInitComposer().compose());
-			//messages.push(new FriendsComposer(habbo).compose());//sended on other callback due to delay getting data
-			messages.push(new UserClubComposer(habbo).compose());
-			messages.push(new UserAchievementScoreComposer(habbo).compose());
-			messages.push(new NewUserIdentityComposer().compose());
-			messages.push(new UserPerksComposer().compose());
-			messages.push(new SessionRightsComposer().compose());
-			messages.push(new FavoriteRoomsCountComposer().compose());
-			messages.push(new UserEffectsListComposer().compose());
-			client.sendResponses(messages);
-		});
-	}
+            let messages: Array<ServerMessage> = new Array<ServerMessage>();
+            messages.push(new AuthenticationOKMessageComposer().compose());
+            messages.push(new UserHomeRoomComposer(habbo.getHabboInfo().getHomeRoom(), 0).compose());
+            messages.push(new UserPermissionsComposer(habbo).compose());
+            messages.push(new MessengerInitComposer().compose());
+            //messages.push(new FriendsComposer(habbo).compose());//sended on other callback due to delay getting data
+            messages.push(new UserClubComposer(habbo).compose());
+            messages.push(new UserAchievementScoreComposer(habbo).compose());
+            messages.push(new NewUserIdentityComposer().compose());
+            messages.push(new UserPerksComposer().compose());
+            messages.push(new SessionRightsComposer().compose());
+            messages.push(new FavoriteRoomsCountComposer().compose());
+            messages.push(new UserEffectsListComposer().compose());
+            client.sendResponses(messages);
+        });
+    }
 }

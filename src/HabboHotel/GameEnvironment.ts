@@ -9,59 +9,59 @@ import NavigatorManager from './Navigation/NavigatorManager';
 import PermissionsManager from './Permissions/PermissionsManager';
 
 export default class GameEnvironment {
-	private habboManager: HabboManager;
-	private hotelViewManager: HotelViewManager;
-	private guildManager: GuildManager;
-	private itemManager: ItemManager;
-	private catalogManager: CatalogManager;
-	private roomManager: RoomManager;
-	private navigatorManager: NavigatorManager;
-	private permissionsManager: PermissionsManager;
+    private habboManager: HabboManager;
+    private hotelViewManager: HotelViewManager;
+    private guildManager: GuildManager;
+    private itemManager: ItemManager;
+    private catalogManager: CatalogManager;
+    private roomManager: RoomManager;
+    private navigatorManager: NavigatorManager;
+    private permissionsManager: PermissionsManager;
 
-	public load(): void {
-		Emulator.getLogging().logStart('GameEnvironment -> Loading...');
-		this.habboManager = new HabboManager();
-		this.hotelViewManager = new HotelViewManager();
-		this.guildManager = new GuildManager();
-		this.itemManager = new ItemManager();
-		this.itemManager.load();
-		this.catalogManager = new CatalogManager();
-		this.roomManager = new RoomManager();
-		this.navigatorManager = new NavigatorManager();
-		this.permissionsManager = new PermissionsManager();
+    public load(): void {
+        Emulator.getLogging().logStart('GameEnvironment -> Loading...');
+        this.habboManager = new HabboManager();
+        this.hotelViewManager = new HotelViewManager();
+        this.guildManager = new GuildManager();
+        this.itemManager = new ItemManager();
+        this.itemManager.load();
+        this.catalogManager = new CatalogManager();
+        this.roomManager = new RoomManager();
+        this.navigatorManager = new NavigatorManager();
+        this.permissionsManager = new PermissionsManager();
 
-		Emulator.getLogging().logStart('GameEnvironment -> Loaded!');
-	}
+        Emulator.getLogging().logStart('GameEnvironment -> Loaded!');
+    }
 
-	public getHabboManager(): HabboManager {
-		return this.habboManager;
-	}
+    public getHabboManager(): HabboManager {
+        return this.habboManager;
+    }
 
-	public getHotelViewManager(): HotelViewManager {
-		return this.hotelViewManager;
-	}
+    public getHotelViewManager(): HotelViewManager {
+        return this.hotelViewManager;
+    }
 
-	public getGuildManager(): GuildManager {
-		return this.guildManager;
-	}
+    public getGuildManager(): GuildManager {
+        return this.guildManager;
+    }
 
-	public getItemManager(): ItemManager {
-		return this.itemManager;
-	}
+    public getItemManager(): ItemManager {
+        return this.itemManager;
+    }
 
-	public getCatalogManager(): CatalogManager {
-		return this.catalogManager;
-	}
+    public getCatalogManager(): CatalogManager {
+        return this.catalogManager;
+    }
 
-	public getRoomManager(): RoomManager {
-		return this.roomManager;
-	}
+    public getRoomManager(): RoomManager {
+        return this.roomManager;
+    }
 
-	public getNavigatorManager(): NavigatorManager {
-		return this.navigatorManager;
-	}
+    public getNavigatorManager(): NavigatorManager {
+        return this.navigatorManager;
+    }
 
-	public getPermissionsManager(): PermissionsManager {
-		return this.permissionsManager;
-	}
+    public getPermissionsManager(): PermissionsManager {
+        return this.permissionsManager;
+    }
 }

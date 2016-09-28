@@ -6,16 +6,16 @@ import RoomRelativeMapComposer from '../../Outgoing/Rooms/RoomRelativeMapCompose
 import RoomHeightMapComposer from '../../Outgoing/Rooms/RoomHeightMapComposer';
 
 export default class RequestRoomHeightmapEvent extends MessageHandler {
-	public handle(): void {
-		if(this.client.getHabbo().getHabboInfo().getLoadingRoom() > 0){
-			Emulator.getGameEnvironment().getRoomManager().loadRoom(this.client.getHabbo().getHabboInfo().getLoadingRoom(), this.client, function(room: Room, client: GameClient){
-				if(room != null){
-					client.sendResponse(new RoomRelativeMapComposer(room));
-					client.sendResponse(new RoomHeightMapComposer(room));
+    public handle(): void {
+        if (this.client.getHabbo().getHabboInfo().getLoadingRoom() > 0) {
+            Emulator.getGameEnvironment().getRoomManager().loadRoom(this.client.getHabbo().getHabboInfo().getLoadingRoom(), this.client, function(room: Room, client: GameClient) {
+                if (room != null) {
+                    client.sendResponse(new RoomRelativeMapComposer(room));
+                    client.sendResponse(new RoomHeightMapComposer(room));
 
-					Emulator.getGameEnvironment().getRoomManager().enterRoom(client.getHabbo(), room);
-				}
-			});
-		}
-	}
+                    Emulator.getGameEnvironment().getRoomManager().enterRoom(client.getHabbo(), room);
+                }
+            });
+        }
+    }
 }
