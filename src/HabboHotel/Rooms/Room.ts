@@ -6,12 +6,16 @@ import RoomOwnerComposer from '../../Messages/Outgoing/Rooms/RoomOwnerComposer';
 import RoomRightsComposer from '../../Messages/Outgoing/Rooms/RoomRightsComposer';
 import RoomUnitIdleComposer from '../../Messages/Outgoing/Rooms/Users/RoomUnitIdleComposer';
 import RoomUserStatusComposer from '../../Messages/Outgoing/Rooms/Users/RoomUserStatusComposer';
+import RoomUserTalkComposer from '../../Messages/Outgoing/Rooms/Users/RoomUserTalkComposer';
+import RoomUserShoutComposer from '../../Messages/Outgoing/Rooms/Users/RoomUserShoutComposer';
 import RoomRightLevels from './RoomRightLevels';
 import ServerMessage from '../../Messages/ServerMessage';
 import Runnable from '../../Threading/Runnable';
 import RoomUnit from './RoomUnit';
 import GameMap from '../../Util/Pathfinding/GameMap';
 import Node from '../../Util/Pathfinding/Node';
+import RoomChatMessage from './RoomChatMessage';
+import RoomChatType from './RoomChatType';
 
 export default class Room extends Runnable {
     private id: number;
@@ -251,6 +255,33 @@ export default class Room extends Runnable {
         habbo.getRoomUnit().resetIdleTimer();
 
         this.sendComposer(new RoomUnitIdleComposer(habbo.getRoomUnit()).compose());
+    }
+
+    public talk(habbo: Habbo, roomChatMessage: RoomChatMessage, chatType: RoomChatType, ignoreWired?: boolean): void {
+        if (!ignoreWired)
+            ignoreWired = false;
+
+        this.unIdle(habbo);
+
+        //this.sendComposer(new RoomUserTypingComposer(habbo.getRoomUnit(), false).compose());
+        if (roomChatMessage == null || roomChatMessage.getMessage() == null || roomChatMessage.getMessage() == "")
+            return;
+
+        //if (habbo.getRoomUnit().talkTimeOut > 0 && (Emulator.getIntUnixTimestamp() - habbo.getRoomUnit().talkTimeOut < 0))
+        //    return;
+
+        //habbo.getRoomUnit().talkCounter++;
+        let message: ServerMessage;
+
+        if (chatType == RoomChatType.WHISPER) {
+
+        } else if (chatType == RoomChatType.TALK) {
+            message = new RoomUserTalkComposer(roomChatMessage).compose();
+            this.sendComposer(message);
+        } else if (chatType == RoomChatType.SHOUT) {
+            message = new RoomUserShoutComposer(roomChatMessage).compose();
+            this.sendComposer(message);
+        }
     }
 
     public getId(): number {

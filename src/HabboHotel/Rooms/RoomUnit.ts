@@ -243,6 +243,23 @@ export default class RoomUnit {
         this.headRotation = rotation;
     }
 
+    public canTalk(): boolean {
+        if (this.wiredMuted)
+            return false;
+
+        return !this.isModMuted();
+    }
+
+    public isModMuted(): boolean {
+        if (this.modMuted) {
+            if (this.modMuteTime < Emulator.getIntUnixTimestamp()) {
+                this.modMuted = false;
+            }
+        }
+
+        return this.modMuted;
+    }
+
     public cycle(room: Room): boolean {
         if (!this.isWalking())
             return false;

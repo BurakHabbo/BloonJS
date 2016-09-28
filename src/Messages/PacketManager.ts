@@ -18,6 +18,8 @@ import RequestUserClubEvent from './Incoming/Users/RequestUserClubEvent';
 import RequestRoomDataEvent from './Incoming/Rooms/RequestRoomDataEvent';
 import RequestRoomLoadEvent from './Incoming/Rooms/RequestRoomLoadEvent';
 import RequestRoomHeightmapEvent from './Incoming/Rooms/RequestRoomHeightmapEvent';
+import RoomUserTalkEvent from './Incoming/Rooms/Users/RoomUserTalkEvent';
+import RoomUserShoutEvent from './Incoming/Rooms/Users/RoomUserShoutEvent';
 import RoomUserSignEvent from './Incoming/Rooms/Users/RoomUserSignEvent';
 import RoomUserWalkEvent from './Incoming/Rooms/Users/RoomUserWalkEvent';
 import RequestNewNavigatorDataEvent from './Incoming/Navigator/RequestNewNavigatorDataEvent';
@@ -125,6 +127,8 @@ export default class PacketManager {
         this.registerHandler(Incoming.RequestRoomHeightmapEvent, RequestRoomHeightmapEvent);
         this.registerHandler(Incoming.RoomUserSignEvent, RoomUserSignEvent);
         this.registerHandler(Incoming.RoomUserWalkEvent, RoomUserWalkEvent);
+        this.registerHandler(Incoming.RoomUserTalkEvent, RoomUserTalkEvent);
+        this.registerHandler(Incoming.RoomUserShoutEvent, RoomUserShoutEvent);
     }
 
     public registerNavigator(): void {
