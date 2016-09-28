@@ -7,6 +7,19 @@ function rglob($pattern, $flags = 0) {
     return $files;
 }
 
-foreach(rglob("src/*.ts") as $fileName){
-	system("tsfmt -r ".$fileName);
+function startsWith($haystack, $needle) {
+    return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== false;
+}
+
+function endsWith($haystack, $needle) {
+    return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== false);
+}
+
+exec('git status', $status);
+
+foreach($status as $line){
+	$e = explode(':   ', $line);
+	if(isset($e[1]) && startsWith($e[1], "src/")){
+		system("tsfmt -r ".$e[1]);
+	}
 }
